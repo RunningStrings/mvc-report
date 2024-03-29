@@ -1,0 +1,15 @@
+@import '../../node_modules/normalize.css/normalize';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import 'variables';
+
+@import 'typography';
+
+@import 'base';
+@import 'placement';
+@import 'header';
+@import 'main';
+@import 'footer';
+@import 'img';

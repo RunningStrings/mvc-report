@@ -1,0 +1,38 @@
+img {
+    filter: $image-filter;
+    max-width: 100%;
+}
+
+.small {
+    border: 2px solid $image-border-color;
+    border-radius: 5px;
+    filter: $image-filter;
+    float:left;
+    margin-bottom: 5px;
+    margin-right: 15px;
+    margin-top: 1.4em;
+    max-width: 250px;
+    vertical-align: top;
+}
+
+.logo {
+    filter: $logo-filter;
+
+    &:hover {
+        filter: $logo-filter-hover;
+    }
+}
+
+.screenshot-preview {
+    max-height: 200px;
+    width: auto;
+    cursor: pointer;
+}
+
+.wheel {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    padding: 5px;
+}

@@ -1,0 +1,29 @@
+<div class="header" role="banner">
+    <div class="site-header" style="background-image: url({{ asset('img/background.jpg') }})">
+        {# <span class="site-title">My Symfony Site</span> #}
+        {% if metadata.logo %}
+        <div class="logo">
+            <a href="{{ path('home') }}">
+                <img src="{{ asset(metadata.logo) }}" alt="Logo" />
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="title">
+        <a href="{{ path('home') }}">
+            <h1>Annie Gustafsson</h1>
+            <p>{{ metadata.tagline }}</p>
+        </a>
+    </div>
+    <div class="nav">
+        <div id="nav" role="navigation">
+            <ul>
+                <li><a href="{{ path('home') }}">Home</a></li>
+                <li><a href="{{ path('about') }}">About</a></li>
+                <li><a href="{{ path('report') }}">Report</a></li>
+                <li><a href="{{ path('lucky') }}">Lucky</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

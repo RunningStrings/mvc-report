@@ -1,0 +1,40 @@
+body {
+    background-color: $background-color;
+}
+
+* {
+    box-sizing: border-box;
+    border: 0 none;
+    color: $font-color;
+    margin: 0;
+    padding: 0;
+}
+
+ol, ul {
+    padding-left: 1.5em;
+}
+
+.hidden {
+    display: none !important;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* Placement */
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1 0 auto;
+    margin: 0 auto;
+    width: 64em;
+}
+
+.header, .footer {
+    flex: 0 0 auto;
+}

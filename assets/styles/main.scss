@@ -1,0 +1,55 @@
+/* main */
+
+.main {
+    background-color: $content-color;
+    font-size: 1.1em;
+    line-height: 1.2;
+    max-width: 75ch;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+    text-align: justify;
+}
+
+.main h1 {
+    vertical-align: top;
+}
+
+.main a {
+    color: $link-color;
+    text-decoration: none;
+    transition: color 0.1s ease-in-out, text-decoration 0.1s ease-in-out;
+
+    &:hover {
+        color: $link-hover-color-content;
+        text-decoration: underline;
+        text-decoration-skip-ink: auto;
+    }
+}
+
+@media only screen and (max-width:600px ) {
+    .main {
+        font-size: 1.2em;
+        line-height: 1.4;
+        max-width: 100%;
+        padding: 0 1rem;
+        padding-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+p {
+    margin-bottom: 1.2rem;
+}
+
+ul {
+    list-style-type:circle;
+}
+
+.bold-link {
+    font-weight: bold;
+}
+
+code {
+    color: $darkest-text;
+}
