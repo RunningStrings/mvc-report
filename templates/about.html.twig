@@ -1,13 +1,49 @@
 {% extends "base.html.twig" %}
 
-{% block title %}About{% endblock %}
+{% block title %}Om{% endblock %}
 
 {% block body %}
-    <h1>About</h1>
-    <p>An image which can be clicked on.</p>
-    <a href="{{ asset('img/glider.svg') }}">
-        <img src="{{ asset('img/glider.svg') }}" alt="">
-    </a>
+    <h1>Om kursen</h1>
+    <div class="col-wrapper">
+        <div class="col-left">
+            <p>
+                I kursen Objektorienterade webbteknologier, eller mvc,
+                kommer vi i huvudsak att fokusera på objektorienterade
+                programmeringstekniker i PHP.
+            </p>
+
+            <p>
+                Målet med kursen är att vi ska få kunskap, färdighet och
+                förståelse inom utveckling med objektorienterad programmering
+                och databaser i webbmiljö, och även kunna hantera där för 
+                avsedda verktyg och miljöer i ett ramverk för webbutveckling
+            </p>
+
+            <p>
+                Enligt ryktet, och enligt den allmänna känslan efter att ha
+                läst igenom beskrivningen av kursen, så kommer de närmaste
+                veckorna att innehålla ett slags avancerad och fördjupad version
+                av utbildningens inledande kurs i webteknologier, och i stora
+                drag kommer vi att få användning av de kunskaper vi hittills
+                har tillskansat oss.
+            </p>
+            
+        </div>
+        <div class="col-right">
+
+            <img src="{{ asset('img/php_emblem.png') }}" class="unfiltered-small" alt="PHP-logo">
+            <div class="about-links">
+                <div class="box">
+                    <a href="https://github.com/dbwebb-se/mvc" class="repo-link">Kursen mvc på Github</a>
+                </div>
+                <div class="box">
+                    <a href="https://github.com/RunningStrings/mvc-report" class="repo-link">Mitt repo för kursen på Github</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
 
     <img src="{{ asset('build/images/background.jpg') }}" alt="">
 

@@ -1,7 +1,30 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Report{% endblock %}
+{% block title %}Redovisning{% endblock %}
 
 {% block body %}
-    <h1>Report</h1>
+
+<div class="report-wrapper">
+    {% set reportDir = 'report/' %}
+    <div class="sidebar">
+        <h3>Innehåll</h3>
+        <ul>
+            {% for file in reportFiles %}
+                    {% set kmomId = file|replace({'.markdown.twig': ''}) %}
+                    {% set filePath = reportDir ~ file %}
+                    {% set header = include(filePath)|split("\n")|first|split("</a>", 2)|last|trim %}
+                    <li class="sidebar-item"><a href="#{{ kmomId }}">{{ header }}</a></li>
+                {% endfor %}
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>Redovisning</h1>
+        {% for file in reportFiles %}
+            {% set filePath = reportDir ~ file %}
+            {{ include(filePath)|markdown_to_html }}
+        {% endfor %}
+        <a href="#">Tillbaka till början</a>
+    </div>
+</div>
+
 {% endblock %}

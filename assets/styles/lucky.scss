@@ -1,0 +1,67 @@
+.magic-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.magic-number-low {
+    animation: bounce 0.25s ease infinite alternate, color-change-blue 3s infinite;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes color-change-blue {
+    0% {
+        color: darkblue;
+    }
+    33% {
+        color: mediumblue;
+    }
+    66% {
+        color: lightblue;
+    }
+    100% {
+        color: mediumblue;
+    }
+}
+
+.magic-number-high {
+    width: 75px;
+    height: 75px;
+    animation: rotate 2s linear infinite, color-change-red 3s infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes color-change-red {
+    0% {
+        color: darkred;
+    }
+    33% {
+        color: firebrick;
+    }
+    66% {
+        color: lightcoral;
+    }
+    100% {
+        color: firebrick;
+    }
+}
+
+.magic.image {
+    max-width: 150px;
+}

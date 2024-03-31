@@ -2,10 +2,13 @@
 
 {% extends "base.html.twig" %}
 
-{% block title %}Magic number{% endblock %}
+{% block title %}Lucky{% endblock %}
 
 {% block body %}
-    <h1>Magic number</h1>
+    <h1>Lucky? You bet</h1>
     <p>Welcome to my awesome magical homepage.</p>
-    <p>This is the current magic number: {{ number }}</p>
+    <p>This is the current magic number:</p>
+    <div magic-box>
+        <div {% if number > 50 %} class="magic-number-high"{% else %} class="magic-number-low"{% endif %}>{{ number }}</div>
+    </div>
 {% endblock %}

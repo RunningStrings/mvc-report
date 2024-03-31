@@ -1,0 +1,46 @@
+.report-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.sidebar {
+    padding: 3em 1em 0 0;
+    width: 20%;
+}
+
+.sidebar h3 {
+    padding: 0 0 0.5em;
+}
+
+.sidebar-item {
+    padding: 0.2em 0;
+}
+
+.sidebar-item a {
+    color: $link-color;
+    transition: color 0.1s;
+    font-family: $header-font;
+
+    &:hover {
+        color: $link-hover-color-content;
+        text-decoration: underline;
+    }
+}
+
+.main-content {
+    width: 70%;
+}
+
+// .main-content h1 {
+//     margin: 0.335em 0;
+// }
+
+.main-content h2 {
+    margin: 0.335em 0;
+}
+
+.main-content h3 {
+    margin: 0.1675em 0;
+}

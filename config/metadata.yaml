@@ -1,9 +1,10 @@
 metadata:
+    websitename: 'Mvc - Annie'
     logo: img/coffee_icon.png
-    tagline: Min Mvc Me-sida
+    tagline: Objektorienterade webbteknologier (mvc v2)
     social:
-        - title: The web site's repo on GitHub.
-          url: https://github.com/RunningStrings/design2023
+        - title: Webbsidans repo på Github.
+          url: https://github.com/RunningStrings/mvc-report
           icon: fab fa-github
         - title: Instagram
           url: https://instagram.com/annievgu/
