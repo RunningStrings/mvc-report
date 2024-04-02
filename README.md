@@ -17,7 +17,7 @@ Before you begin, make sure you have the following installed:
 
 ### Clone the Repository
 
-In you terminal, enter the following command:
+In your terminal, enter the following command:
 
 ```
 git clone https://github.com/RunningStrings/mvc-report
