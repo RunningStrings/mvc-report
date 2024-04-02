@@ -32,7 +32,7 @@
     display: inline;
     list-style-type: none;
     padding: 0 1em;
-    // white-space: nowrap;
+    white-space: nowrap;
 }
 
 .nav a {
@@ -76,6 +76,10 @@
 
     .logo {
         max-width: 30%;
+    }
+
+    .nav ul {
+        flex-direction: column;
     }
 }
 

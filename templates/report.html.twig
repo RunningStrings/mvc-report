@@ -9,19 +9,17 @@
     <div class="sidebar">
         <h3>Innehåll</h3>
         <ul>
-            {% for file in reportFiles %}
-                    {% set kmomId = file|replace({'.markdown.twig': ''}) %}
-                    {% set filePath = reportDir ~ file %}
-                    {% set header = include(filePath)|split("\n")|first|split("</a>", 2)|last|trim %}
-                    <li class="sidebar-item"><a href="#{{ kmomId }}">{{ header }}</a></li>
-                {% endfor %}
+            {% for item in sidebarItems %}
+                <li class="sidebar-item">
+                    <a href="#{{ item.kmomId }}">{{ item.header }}</a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
     <div class="main-content">
         <h1>Redovisning</h1>
-        {% for file in reportFiles %}
-            {% set filePath = reportDir ~ file %}
-            {{ include(filePath)|markdown_to_html }}
+        {% for content in markdownContents %}
+            {{ content|markdown_to_html }}
         {% endfor %}
         <a href="#">Tillbaka till början</a>
     </div>

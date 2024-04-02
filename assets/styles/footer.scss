@@ -24,8 +24,9 @@
     }
 }
 
-.footer .footer-text {
-    display:none;
+.footer .footer-text p {
+    font-family: $header-font;
+    margin: 0.6rem 0;
 }
 
 .footer .social a {

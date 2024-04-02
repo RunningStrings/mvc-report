@@ -49,17 +49,39 @@ class MyController extends AbstractController
         $finder->files()->in($reportDir)->name('*.markdown.twig');
 
         $reportFiles = [];
+        $sidebarItems = [];
+        $markdownContents = [];
         foreach ($finder as $file) {
             $reportFiles[] =$file->getFilename();
+            $kmomId = str_replace('.markdown.twig', '', $file->getFilename());
+            $header = $this->getHeaderFromFile($file->getPathname());
+            $sidebarItems[] = [
+                'kmomId' => $kmomId,
+                'header' => $header,
+            ];
+            $markdownContents[] = file_get_contents($file->getPathname());
         }
 
         sort($reportFiles);
+        sort($sidebarItems);
+        sort($markdownContents);
 
         $metadata = $this->loadMetaData();
         return $this->render('report.html.twig', [
             'metadata' => $metadata,
             'reportFiles' => $reportFiles,
+            'sidebarItems' => $sidebarItems,
+            'markdownContents' => $markdownContents,
         ]);
+    }
+
+    private function getHeaderFromFile(string $filePath): string
+    {
+        $content = file_get_contents($filePath);
+        $lines = explode("\n", $content);
+        $headerLine = $lines[0];
+        $header = trim(strip_tags($headerLine));
+        return $header;
     }
 
     #[Route("/lucky", name: "lucky")]
@@ -67,9 +89,29 @@ class MyController extends AbstractController
     {
         $number = random_int(0, 100);
 
+        $imageMap = [
+            0 => 'img1.jpg',
+            21 => 'img2.jpg',
+            41 => 'img3.jpg',
+            61 => 'img4.jpg',
+            81 => 'img5.gif',
+        ];
+
+        $imagePath = '';
+        foreach ($imageMap as $min => $image) {
+            if ($number >= $min && $number <= $min + 20) {
+                $imagePath = '../img/lucky/' . $image;
+                break;
+            }
+        }
+
+        $cssClass = $number > 50 ? 'magic-number-high' : 'magic-number-low';
+
         $metadata = $this->loadMetaData();
         $data = [
             'number' => $number,
+            'css_class' => $cssClass,
+            'image_path' => $imagePath,
             'metadata' => $metadata,
         ];
 
@@ -135,8 +177,7 @@ class MyController extends AbstractController
 
     private function loadQuotes(): array
     {
-        $quotesFile = __DIR__ . '/../../config/quotes.yaml';
-        $quotesData = Yaml::parseFile($quotesFile);
+        $quotesData = Yaml::parseFile('../config/quotes.yaml');
 
         return $quotesData['quotes'] ?? [];
     }
