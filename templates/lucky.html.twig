@@ -5,10 +5,21 @@
 {% block title %}Lucky{% endblock %}
 
 {% block body %}
-    <h1>Lucky? You bet</h1>
-    <p>Welcome to my awesome magical homepage.</p>
-    <p>This is the current magic number:</p>
-    <div magic-box>
-        <div {% if number > 50 %} class="magic-number-high"{% else %} class="magic-number-low"{% endif %}>{{ number }}</div>
+    <h1>Se och begrunda: Ditt öde</h1>
+    <p>(Ladda om sidan för att välja nytt öde.)</p>
+    <div class="magic-wrapper">
+        <div class="col-left">
+            <p>Ditt magiska nummer:</p>
+            <div class="magic-number">
+                <span class="{{ css_class }}">{{ number }}</span>
+            </div>
+        </div>
+        <div class="col-right">
+            <p>Din alldeles egen ödeschaufför. Tut tut!</p>
+            <div class="magic-image">
+                <img src="{{ image_path }}" width="300">
+            </div>
+        </div>
     </div>
+    
 {% endblock %}
