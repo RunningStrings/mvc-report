@@ -52,7 +52,7 @@ class MyController extends AbstractController
         $sidebarItems = [];
         $markdownContents = [];
         foreach ($finder as $file) {
-            $reportFiles[] =$file->getFilename();
+            $reportFiles[] = $file->getFilename();
             $kmomId = str_replace('.markdown.twig', '', $file->getFilename());
             $header = $this->getHeaderFromFile($file->getPathname());
             $sidebarItems[] = [
@@ -100,7 +100,7 @@ class MyController extends AbstractController
         $imagePath = '';
         foreach ($imageMap as $min => $image) {
             if ($number >= $min && $number <= $min + 20) {
-                $imagePath = '../img/lucky/' . $image;
+                $imagePath = './img/' . $image;
                 break;
             }
         }
