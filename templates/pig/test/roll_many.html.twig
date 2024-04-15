@@ -1,13 +1,13 @@
-{% extends "/pig/home2.html.twig" %}
+{% extends "/pig/home.html.twig" %}
 
 {% block main %}
 <h1>Roll many dice</h1>
 
-<p>You rolled {{ num_dices }} dices. Here is the value of the dices.</p>
+<p>You rolled {{ num_dices }} dice. Here is the value of the dice.</p>
 
 <ul>
 {% for roll in diceRoll %}
-    <li>{{ roll }}</li>
+    <li class="die">{{ roll }}</li>
 {% endfor %}
 </ul>
 
