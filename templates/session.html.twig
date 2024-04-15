@@ -5,13 +5,15 @@
 {% block body %}
 
 <h1>Session Data</h1>
-{{ include('flash.html.twig') }}
+
 <p>
-    Data in session: 
+    Data i sessionen:
 </p>
 <pre class="session-dump">
     {{ dump(session) }}
 </pre>
-<a href="{{ path('session_delete') }}">Delete session</a>
+<a href="{{ path('session_delete') }}">Radera sessionen</a>
+
+{{ include('flash.html.twig') }}
 
 {% endblock %}
