@@ -5,10 +5,15 @@
 {% block body %}
 <h1>Deck of Cards</h1>
 
-<p>This is a classical dice game called "Pig" where you roll a 
-set of dice to try and reach 100 points. You can read more on 
-the <a href="https://en.wikipedia.org/wiki/Pig_(dice_game)"> 
-basics of the game on Wikipedia</a>.</p>
-{% block main %}{% endblock %}
+
+<div class="deck">
+    {% for row in deck|batch(13) %}
+    <div class="card-row">
+        {% for card in row %}
+            {{ card|raw }}
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

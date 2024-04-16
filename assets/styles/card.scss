@@ -1,0 +1,80 @@
+.deck {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-row {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.card {
+    font-size: 48px;
+}
+
+/**
+ * CSS sprite for a deck of cards.
+ */
+.card-sprite {
+    border: 1px solid #55aa55;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 0;
+    margin: 4px;
+    width: 56px;
+    height: 84px;
+    background: url('../images/cards_deck.png') no-repeat;
+}
+
+.card-sprite.card-hearts1 { background-position: -5px -95px; }
+.card-sprite.card-hearts2 { background-position: -67px -95px; }
+.card-sprite.card-hearts3 { background-position: -128px -95px; }
+.card-sprite.card-hearts4 { background-position: -189px -95px; }
+.card-sprite.card-hearts5 { background-position: -250px -95px; }
+.card-sprite.card-hearts6 { background-position: -312px -95px; }
+.card-sprite.card-hearts7 { background-position: -372px -95px; }
+.card-sprite.card-hearts8 { background-position: -434px -95px; }
+.card-sprite.card-hearts9 { background-position: -495px -95px; }
+.card-sprite.card-hearts10 { background-position: -556px -95px; }
+.card-sprite.card-heartsjack { background-position: -617px -95px; }
+.card-sprite.card-heartsqueen { background-position: -679px -95px; }
+.card-sprite.card-heartsking { background-position: -740px -95px; }
+.card-sprite.card-diamonds1 { background-position: -5px -184px; }
+.card-sprite.card-diamonds2 { background-position: -67px -184px; }
+.card-sprite.card-diamonds3 { background-position: -128px -184px; }
+.card-sprite.card-diamonds4 { background-position: -189px -184px; }
+.card-sprite.card-diamonds5 { background-position: -250px -184px; }
+.card-sprite.card-diamonds6 { background-position: -312px -184px; }
+.card-sprite.card-diamonds7 { background-position: -372px -184px; }
+.card-sprite.card-diamonds8 { background-position: -434px -184px; }
+.card-sprite.card-diamonds9 { background-position: -495px -184px; }
+.card-sprite.card-diamonds10 { background-position: -556px -184px; }
+.card-sprite.card-diamondsjack { background-position: -617px -184px; }
+.card-sprite.card-diamondsqueen { background-position: -679px -184px; }
+.card-sprite.card-diamondsking { background-position: -740px -184px; }
+.card-sprite.card-clubs1 { background-position: -5px -274px; }
+.card-sprite.card-clubs2 { background-position: -67px -274px; }
+.card-sprite.card-clubs3 { background-position: -128px -274px; }
+.card-sprite.card-clubs4 { background-position: -189px -274px; }
+.card-sprite.card-clubs5 { background-position: -250px -274px; }
+.card-sprite.card-clubs6 { background-position: -312px -274px; }
+.card-sprite.card-clubs7 { background-position: -372px -274px; }
+.card-sprite.card-clubs8 { background-position: -434px -274px; }
+.card-sprite.card-clubs9 { background-position: -495px -274px; }
+.card-sprite.card-clubs10 { background-position: -556px -274px; }
+.card-sprite.card-clubsjack { background-position: -617px -274px; }
+.card-sprite.card-clubsqueen { background-position: -679px -274px; }
+.card-sprite.card-clubsking { background-position: -740px -274px; }
+.card-sprite.card-spades1 { background-position: -5px -5px; }
+.card-sprite.card-spades2 { background-position: -67px -5px; }
+.card-sprite.card-spades3 { background-position: -128px -5px; }
+.card-sprite.card-spades4 { background-position: -189px -5px; }
+.card-sprite.card-spades5 { background-position: -250px -5px; }
+.card-sprite.card-spades6 { background-position: -312px -5px; }
+.card-sprite.card-spades7 { background-position: -372px -5px; }
+.card-sprite.card-spades8 { background-position: -434px -5px; }
+.card-sprite.card-spades9 { background-position: -495px -5px; }
+.card-sprite.card-spades10 { background-position: -556px -5px; }
+.card-sprite.card-spadesjack { background-position: -617px -5px; }
+.card-sprite.card-spadesqueen { background-position: -679px -5px; }
+.card-sprite.card-spadesking { background-position: -740px -5px; }
