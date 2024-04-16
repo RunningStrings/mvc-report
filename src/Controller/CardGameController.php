@@ -9,12 +9,24 @@ use Symfony\Component\Yaml\Yaml;
 
 class CardGameController extends AbstractController
 {
+    #[Route("/game/card", name: "card")]
+    public function card(): Response
+    {
+        $data = [
+            "metadata" => $this->loadMetaData()
+        ];
+        
+        return $this->render('card/home.html.twig', $data);
+    }
+
     #[Route("/game/card/deck", name: "card_deck")]
     public function home(): Response
     {
-        $metadata = $this->loadMetaData();
+        $data = [
+            "metadata" => $this->loadMetaData()
+        ];
 
-        return $this->render('card/deck.html.twig', ['metadata' => $metadata]);
+        return $this->render('card/deck.html.twig', $data);
     }
 
     private function loadMetaData()
