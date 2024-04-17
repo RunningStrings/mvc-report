@@ -41,13 +41,31 @@ class CardGameController extends AbstractController
     }
 
     #[Route("/card/deck/shuffle", name: "deck_shuffle")]
-    public function shuffle(): Response
+    public function shuffleDeck(
+        SessionInterface $session
+    ): Response
     {
+        $deck = $session->get("deck");
+
+        $shuffledDeck = $deck;
+
+        $shuffledDeck->shuffleDeck();
+        // if ($session->has("deck")) {
+        //     $deck = $session->get("deck");
+        //     $deck->shuffleDeck();
+        //     $session->set("deck", $deck);
+        // } else {
+        //     $deck = new DeckOfCards();
+        //     $session->set("deck", $deck);
+        //     $deck->shuffleDeck();
+        //     $session->set("deck", $deck);
+        // }
         $data = [
+            "deck" => $shuffledDeck->getDeck(),
             "metadata" => $this->loadMetaData()
         ];
 
-        return $this->render('card/deck.html.twig', $data);
+        return $this->render('card/shuffle.html.twig', $data);
     }
 
     #[Route("/card/deck/draw", name: "deck_draw")]

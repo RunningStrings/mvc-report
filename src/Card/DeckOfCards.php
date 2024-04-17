@@ -30,6 +30,30 @@ class DeckOfCards
         return $this->cards;
     }
 
+    public function shuffleDeck()
+    {
+        shuffle($this->cards);
+    }
+
+    public function sortDeck()
+    {
+        usort($this->cards, function($a, $b) {
+            $valueMap = [
+                '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' =>5,
+                '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10,
+                'Jack' => 11, 'Queen' => 12, 'King'=> 13,
+            ];
+
+            $numValueA = $valueMap[$a->getValue()] ?? 0;
+            $numValueB = $valueMap[$b->getValue()] ?? 0;
+
+            if ($a->getSuit() == $b->getSuit()) {
+                return $numValueA - $numValueB;
+            }
+            return strcmp($a->getSuit(), $b->getSuit());
+        });
+    }
+
     public function getDeckArray()
     {
         $deck = [];
