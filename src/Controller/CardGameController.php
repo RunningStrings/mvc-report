@@ -49,17 +49,14 @@ class CardGameController extends AbstractController
     {
         $deck = $session->get("deck");
 
-        if ($session->has("deck")) {
-            $deck = $session->get("deck");
-            $deck->shuffleDeck();
-            $session->set("deck", $deck);
-        } else {
+        if (!$deck || count($deck->getDeck()) === 0) {
             $deck = new DeckOfCards();
             $deck->shuffleDeck();
-            $session->set("deck", $deck);
+        } else {
+            $deck->shuffleDeck();
         }
 
-        $shuffledDeck = $deck;
+        $session->set("deck", $deck);
 
         $data = [
             "deck" => $deck->getDeck(),
@@ -90,6 +87,8 @@ class CardGameController extends AbstractController
             );
         }
 
+        $remainingCards = max(0, $remainingCards -1);
+
         $drawnCard = $deck->draw();
 
         $session->set("deck", $deck);
@@ -97,11 +96,31 @@ class CardGameController extends AbstractController
         $data = [
             "deck" => $deck->getDeck(),
             "drawnCard" => $drawnCard,
-            "remainingCards" => $remainingCards - 1,
+            "remainingCards" => $remainingCards,
             "metadata" => $this->loadMetaData()
         ];
 
         return $this->render('card/draw.html.twig', $data);
+    }
+
+    #[Route("/card/deck/create-and-shuffle/{source}", name:"create_and_shuffle")]
+    public function createAndShuffle(
+        string $source,
+        SessionInterface $session
+    ): Response
+    {
+        $deck = new DeckOfCards();
+        $deck->shuffleDeck();
+        $session->set("deck", $deck);
+
+        switch ($source) {
+            case 'from_draw':
+                return $this->redirectToRoute('deck_draw');
+            case 'from_shuffle':
+                return $this->redirectToRoute('deck_shuffle');
+            default:
+                return $this->redirectToRoute('deck_shuffle');
+        }
     }
 
     private function loadMetaData()
