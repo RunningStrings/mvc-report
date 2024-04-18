@@ -3,7 +3,7 @@
 {% block title %}Card Game{% endblock %}
 
 {% block body %}
-<h1>Cards</h1>
+<h1>{{ title }}</h1>
 
 <div class="col-wrapper">
     <div class="col-left">
@@ -17,15 +17,15 @@
         </p>
     </div>
     <div class="col-right">
-        <div class="card-links">
-            <div class="card-box">
-                <a href="card/deck" class="card-link">Kortlek</a>
+        <div class="about-links">
+            <div class="box">
+                <a href="card/deck" class="repo-link">Kortlek</a>
             </div>
-            <div class="card-box">
-                <a href="card/deck/shuffle" class="card-link">Blanda</a>
+            <div class="box">
+                <a href="card/deck/shuffle" class="repo-link">Blanda</a>
             </div>
-            <div class="card-box">
-                <a href="card/deck/draw" class="card-link">Dra ett kort</a>
+            <div class="box">
+                <a href="card/deck/draw" class="repo-link">Dra ett kort</a>
             </div>
         </div>
     </div>

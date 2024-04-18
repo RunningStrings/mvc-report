@@ -3,7 +3,7 @@
 {% block title %}Shuffled Deck{% endblock %}
 
 {% block body %}
-<h1>Shuffled Deck</h1>
+<h1>{{ title }}</h1>
 
 
 <div class="deck">
@@ -15,9 +15,9 @@
     </div>
     {% endfor %}
 </div>
-<div class="draw-buttons">
-    <div class="card-box">
-        <a href="{{ path('create_and_shuffle', {'source': 'from_shuffle'}) }}" class="card-link">Skapa ny kortlek</a>
+<div class="about-links">
+    <div class="box">
+        <a href="{{ path('create_and_shuffle', {'source': 'from_shuffle'}) }}" class="repo-link">Skapa ny kortlek</a>
     </div>
 </div>
 
