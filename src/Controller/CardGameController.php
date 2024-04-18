@@ -15,6 +15,7 @@ class CardGameController extends AbstractController
     public function card(): Response
     {
         $data = [
+            "title" => "Spelkort",
             "metadata" => $this->loadMetaData()
         ];
         
@@ -26,16 +27,25 @@ class CardGameController extends AbstractController
         SessionInterface $session
     ): Response
     {
-        if ($session->has("deck")) {
-            $deck = $session->get("deck");
-            $deck->sortDeck();
-            $session->set("deck", $deck);
-        } else {
+        $deck = $session->get("deck");
+
+        if (!$deck) {
             $deck = new DeckOfCards();
             $session->set("deck", $deck);
+        } else {
+            if (count($deck->getDeck()) === 0) {
+                $this->addFlash(
+                    'warning',
+                    'Alla kort i leken har dragits!'
+                );
+            } else {
+                $deck->sortDeck();
+            }
         }
+
         $data = [
             "deck" => $deck->getDeck(),
+            "title" => "Kortlek",
             "metadata" => $this->loadMetaData()
         ];
 
@@ -60,6 +70,7 @@ class CardGameController extends AbstractController
 
         $data = [
             "deck" => $deck->getDeck(),
+            "title" => "Blanda kortleken",
             "metadata" => $this->loadMetaData()
         ];
 
@@ -83,27 +94,75 @@ class CardGameController extends AbstractController
         if ($remainingCards === 0) {
             $this->addFlash(
                 'warning',
-                'The deck is empty!'
+                'Alla kort i leken har dragits!'
             );
         }
 
         $remainingCards = max(0, $remainingCards -1);
 
-        $drawnCard = $deck->draw();
+        $drawnCards = $deck->draw();
 
         $session->set("deck", $deck);
 
         $data = [
             "deck" => $deck->getDeck(),
-            "drawnCard" => $drawnCard,
+            "drawnCards" => $drawnCards,
             "remainingCards" => $remainingCards,
+            "title" => "Dra ett kort",
             "metadata" => $this->loadMetaData()
         ];
 
         return $this->render('card/draw.html.twig', $data);
     }
 
-    #[Route("/card/deck/create-and-shuffle/{source}", name:"create_and_shuffle")]
+    #[Route("/card/deck/draw/{number<\d+>}", name: "draw_many")]
+    public function drawMany(
+        int $number,
+        SessionInterface $session
+    ): Response
+    {
+        $deck = $session->get("deck");
+
+        if (!$deck) {
+            $deck = new DeckOfCards();
+            $session->set("deck", $deck);
+        }
+
+        $remainingCards = count($deck->getDeck());
+
+        if ($remainingCards === 0) {
+            $this->addFlash(
+                'warning',
+                'Alla kort i leken har dragits!'
+            );
+        }
+
+        $remainingCards = max(0, $remainingCards - $number);
+
+        $drawnCards = [];
+        for ($i = 0; $i < $number; $i++) {
+            $drawnCard = $deck->draw();
+            if ($drawnCard) {
+                $drawnCards[] = $drawnCard;
+            } else {
+                break;
+            }
+        }
+
+        $session->set("deck", $deck);
+
+        $data = [
+            "deck" => $deck->getDeck(),
+            "drawnCards" => $drawnCards,
+            "remainingCards" => $remainingCards,
+            "title" => "Dra kort ur leken",
+            "metadata" => $this->loadMetaData()
+        ];
+
+        return $this->render('card/draw.html.twig', $data);
+    }
+
+    #[Route("/card/deck/create-and-shuffle/{source}", name: "create_and_shuffle")]
     public function createAndShuffle(
         string $source,
         SessionInterface $session
@@ -121,6 +180,23 @@ class CardGameController extends AbstractController
             default:
                 return $this->redirectToRoute('deck_shuffle');
         }
+    }
+
+    #[Route("/card/deck/create", name: "create")]
+    public function createSorted(
+        SessionInterface $session
+    ): Response
+    {
+        $deck = new DeckOfCards();
+        $session->set("deck", $deck);
+
+        $data = [
+            "deck" => $deck->getDeck(),
+            "title" => "Kortlek",
+            "metadata" => $this->loadMetaData()
+        ];
+
+        return $this->render('card/deck.html.twig', $data);
     }
 
     private function loadMetaData()
