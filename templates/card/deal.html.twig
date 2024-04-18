@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Deal cards{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<div class="remaining-cards">
+    Antal kort kvar i leken: {{ remainingCards }}
+</div>
+
+{{ include('flash.html.twig') }}
+
+<div class="dealt-cards">
+    {% for playerHand in playerHands %}
+        <div class="player-cards">
+            <h2>Spelare {{ loop.index }}</h2>
+            <div class="card-row">
+                {% for card in playerHand.getHand() %}
+                    <div class="single-card">
+                        {{ card|raw }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

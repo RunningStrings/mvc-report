@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Card\CardHand;
 use App\Card\DeckOfCards;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -162,6 +163,55 @@ class CardGameController extends AbstractController
         return $this->render('card/draw.html.twig', $data);
     }
 
+    #[Route("/card/deck/deal/{players}/{cards}", name: "deal_cards")]
+    public function dealCards(
+        int $players,
+        int $cards,
+        SessionInterface $session
+    ): Response
+    {
+        $deck = $session->get("deck");
+
+        if (!$deck) {
+            $deck = new DeckOfCards();
+            $deck->shuffleDeck();
+            $session->set("deck", $deck);
+        }
+
+        $playerHands = [];
+        for ($i = 0; $i < $players; $i++) {
+            $playerHands[] = new CardHand($deck);
+        }
+
+        for ($i = 0; $i < $cards; $i++) {
+            foreach ($playerHands as $playerHand) {
+                $card = $deck->draw();
+                if ($card) {
+                    $playerHand->addCard($card);
+                } else {
+                    $this->addFlash(
+                        'warning',
+                        'Alla kort i leken har dragits!'
+                    );
+                    break 2;
+                }
+            }
+        }
+
+        $remainingCards = count($deck->getDeck());
+
+        $data = [
+            "playerHands" => $playerHands,
+            "remainingCards" => $remainingCards,
+            "players" => $players,
+            "cards" => $cards,
+            "title" => "Utdelade kort",
+            "metadata" => $this->loadMetaData()
+        ];
+
+        return $this->render('card/deal.html.twig', $data);
+    }
+
     #[Route("/card/deck/create-and-shuffle/{source}", name: "create_and_shuffle")]
     public function createAndShuffle(
         string $source,
@@ -175,6 +225,8 @@ class CardGameController extends AbstractController
         switch ($source) {
             case 'from_draw':
                 return $this->redirectToRoute('deck_draw');
+            case 'from_deal':
+                return $this->redirectToRoute('deal_cards');
             case 'from_shuffle':
                 return $this->redirectToRoute('deck_shuffle');
             default:
