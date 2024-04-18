@@ -3,7 +3,7 @@
 {% block title %}Deck of Cards{% endblock %}
 
 {% block body %}
-<h1>Deck of Cards</h1>
+<h1>{{ title }}</h1>
 
 
 <div class="deck">
@@ -14,6 +14,14 @@
         {% endfor %}
     </div>
     {% endfor %}
+</div>
+
+{{ include('flash.html.twig') }}
+
+<div class="about-links">
+    <div class="box">
+        <a href="{{ path('create') }}" class="repo-link">Skapa ny kortlek</a>
+    </div>
 </div>
 
 {% endblock %}
