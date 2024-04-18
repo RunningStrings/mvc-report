@@ -48,6 +48,15 @@ During development, watch for changes to assets and recompile automatically by e
 npm run watch
 ```
 
+### How to make certain assets work
+
+Due to certain unforeseen incompatibilities, in order to make background images and Fontawesome icons function correctly: After using 'npm run build' or 'npm run watch', edit the generated file app.css in public/build/ by therein removing all instances of
+
+```
+build/
+```
+then save the file, and refresh the app on your local server, or upload to live server. Background images and Fontawesome icons should now load as expected.
+
 ### Run the App Locally
 
 While in the project directory, open the PHP built-in web server:
