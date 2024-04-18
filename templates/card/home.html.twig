@@ -8,17 +8,24 @@
 <div class="col-wrapper">
     <div class="col-left">
         <p>Playing cards, how do they work?</p>
+        <p>Den här delen av webbsidan är strukturerad genom klasserna
+            Card, CardGraphic och DeckOfCards. Klassen Card skapar ett
+            spelkort, CardGraphic, som är en subklass till Card (och ärver dess
+            variabler och metoder), ger spelkorten grafisk representation, 
+            och DeckOfCards skapar en kortlek genom anrop till klassen 
+            CardGraphic.
+        </p>
     </div>
     <div class="col-right">
-        <div class="about-links">
-            <div class="box">
-                <a href="card/deck" class="repo-link">Deck</a>
+        <div class="card-links">
+            <div class="card-box">
+                <a href="card/deck" class="card-link">Kortlek</a>
             </div>
-            <div class="box">
-                <a href="card/deck/shuffle" class="repo-link">Shuffle</a>
+            <div class="card-box">
+                <a href="card/deck/shuffle" class="card-link">Blanda</a>
             </div>
-            <div class="box">
-                <a href="card/deck/draw" class="repo-link">Draw</a>
+            <div class="card-box">
+                <a href="card/deck/draw" class="card-link">Dra ett kort</a>
             </div>
         </div>
     </div>
