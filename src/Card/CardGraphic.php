@@ -16,8 +16,6 @@ class CardGraphic extends Card
 
         $cardClass = "card-" . $suit . $value;
 
-        // $backgroundImage = "url('../img/cards_deck.png')";
-
         return sprintf('<i class="card-sprite %s"></i>',
         $cardClass
     );
