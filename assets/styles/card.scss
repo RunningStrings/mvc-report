@@ -3,13 +3,21 @@
     flex-wrap: wrap;
 }
 
-.card-row {
+.draw-wrapper {
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
 }
 
-.card {
-    font-size: 48px;
+.remaining-cards {
+    display: inline-block;
+    padding: auto;
+    margin: 4px;
+}
+
+.card-row,
+.single-card {
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 /**

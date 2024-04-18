@@ -62,7 +62,7 @@ class CardGameController extends AbstractController
         $shuffledDeck = $deck;
 
         $data = [
-            "deck" => $shuffledDeck->getDeck(),
+            "deck" => $deck->getDeck(),
             "metadata" => $this->loadMetaData()
         ];
 
@@ -70,13 +70,38 @@ class CardGameController extends AbstractController
     }
 
     #[Route("/card/deck/draw", name: "deck_draw")]
-    public function draw(): Response
+    public function draw(
+        SessionInterface $session
+    ): Response
     {
+        $deck = $session->get("deck");
+
+        if (!$deck) {
+            $deck = new DeckOfCards();
+            $session->set("deck", $deck);
+        }
+
+        $remainingCards = count($deck->getDeck());
+
+        if ($remainingCards === 0) {
+            $this->addFlash(
+                'warning',
+                'The deck is empty!'
+            );
+        }
+
+        $drawnCard = $deck->draw();
+
+        $session->set("deck", $deck);
+
         $data = [
+            "deck" => $deck->getDeck(),
+            "drawnCard" => $drawnCard,
+            "remainingCards" => $remainingCards - 1,
             "metadata" => $this->loadMetaData()
         ];
 
-        return $this->render('card/deck.html.twig', $data);
+        return $this->render('card/draw.html.twig', $data);
     }
 
     private function loadMetaData()

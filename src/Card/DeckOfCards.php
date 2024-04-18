@@ -68,12 +68,8 @@ class DeckOfCards
         });
     }
 
-    public function getDeckArray()
+    public function draw()
     {
-        $deck = [];
-        foreach ($this->cards as $card) {
-            $deck[] = $card->toArray();
-        }
-        return $deck;
+        return array_shift($this->cards);
     }
 }

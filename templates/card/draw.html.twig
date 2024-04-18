@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Draw a Card{% endblock %}
+
+{% block body %}
+<h1>Draw a Card</h1>
+
+
+<div class="deck">
+    <div class="draw-wrapper">
+        <div class="single-card">
+            {{ drawnCard|raw }}
+        </div>
+        <div class="remaining-cards">
+            {{ remainingCards }}
+        </div>
+    </div>
+    
+</div>
+
+
+<a href="{{ path('deck_draw') }}" class="btn btn-primary">Draw a Card</a>
+
+{{ include('flash.html.twig') }}
+
+{% endblock %}
