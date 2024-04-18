@@ -3,7 +3,7 @@
 {% block title %}Draw a Card{% endblock %}
 
 {% block body %}
-<h1>Draw a Card</h1>
+<h1>{{ title }}</h1>
 
 
 
@@ -13,23 +13,35 @@
             Antal kort kvar i leken: {{ remainingCards }}
         </div>
         <div class="draw-buttons">
-            <div class="card-box">
-                <a href="{{ path('deck_draw') }}" class="card-link">Draw a Card</a>
+            <div class="box">
+                <a href="{{ path('deck_draw') }}" class="repo-link">Dra ett kort</a>
             </div>
             {% if remainingCards == 0 %}
-                <div class="card-box">
-                    <a href="{{ path('create_and_shuffle', {'source': 'from_draw'}) }}" class="card-link">Draw from a new deck</a>
+                <div class="box">
+                    <a href="{{ path('create_and_shuffle', {'source': 'from_draw'}) }}" class="repo-link">Dra från ny kortlek</a>
                 </div>
             {% endif %}
         </div>
     </div>
-    <div class="single-card">
-        {{ drawnCard|raw }}
+
+    <div class="deck">
+        {% if drawnCards is iterable %}
+            {% for row in drawnCards|batch(13) %}
+                <div class="card-row">
+                    {% for card in row %}
+                        <div class="single-card">
+                            {{ card|raw }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="single-card">
+                {{ drawnCards|raw }}
+            </div>
+        {% endif %}
     </div>
 </div>
-
-
-
 
 {{ include('flash.html.twig') }}
 
