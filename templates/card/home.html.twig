@@ -7,13 +7,24 @@
 
 <div class="col-wrapper">
     <div class="col-left">
-        <p>Playing cards, how do they work?</p>
-        <p>Den här delen av webbsidan är strukturerad genom klasserna
-            Card, CardGraphic och DeckOfCards. Klassen Card skapar ett
-            spelkort, CardGraphic, som är en subklass till Card (och ärver dess
-            variabler och metoder), ger spelkorten grafisk representation, 
-            och DeckOfCards skapar en kortlek genom anrop till klassen 
-            CardGraphic.
+        <p>
+            Den här delen av webbsidan är strukturerad genom klasserna
+            Card, CardGraphic, DeckOfCards och CardHand.
+        </p>
+        <p>
+            Klassen Card skapar ett spelkort, och CardGraphic, som är en
+            subklass till Card (och ärver dess variabler och metoder), 
+            ger spelkorten grafisk representation.
+        </p>
+        <p>
+            DeckOfCards skapar en kortlek genom anrop till klassen 
+            CardGraphic, och är därigenom relaterad till CardGraphic, och 
+            indirekt till Card, genom komposition.
+        </p>
+        <p>
+            Ett CardHand-objekt håller en array bestående av Card-objekt, och är konstruerat med en 
+            referens till ett DeckOfCards-objekt, vilket gör att CardHand har 
+            kompositionsförhållande till både Card och DeckOfCards.
         </p>
     </div>
     <div class="col-right">
@@ -22,10 +33,16 @@
                 <a href="card/deck" class="repo-link">Kortlek</a>
             </div>
             <div class="box">
-                <a href="card/deck/shuffle" class="repo-link">Blanda</a>
+                <a href="card/deck/shuffle" class="repo-link">Blanda kort</a>
             </div>
             <div class="box">
                 <a href="card/deck/draw" class="repo-link">Dra ett kort</a>
+            </div>
+            <div class="box">
+                <a href="card/deck/draw/3" class="repo-link">Dra tre kort</a>
+            </div>
+            <div class="box">
+                <a href="card/deck/deal/4/5" class="repo-link">Dela ut kort</a>
             </div>
         </div>
     </div>
