@@ -37,20 +37,34 @@ class DeckOfCards
 
     public function sortDeck()
     {
-        usort($this->cards, function($a, $b) {
-            $valueMap = [
+        $suitMap = [
+                'Hearts' => 1, 'Diamonds' => 2, 'Clubs' => 3, 'Spades' => 4,
+            ];
+
+
+        $valueMap = [
                 '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' =>5,
                 '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10,
                 'Jack' => 11, 'Queen' => 12, 'King'=> 13,
             ];
 
+        
+        usort($this->cards, function($a, $b) use ($suitMap, $valueMap) {
+            $suitValueA = $suitMap[$a->getSuit()] ?? 0;
+            $suitValueB = $suitMap[$b->getSuit()] ?? 0;
+
             $numValueA = $valueMap[$a->getValue()] ?? 0;
             $numValueB = $valueMap[$b->getValue()] ?? 0;
 
-            if ($a->getSuit() == $b->getSuit()) {
-                return $numValueA - $numValueB;
+            if ($suitValueA != $suitValueB) {
+                return $suitValueA - $suitValueB;
             }
-            return strcmp($a->getSuit(), $b->getSuit());
+
+            if ($numValueA != $numValueB) {
+                return $numValueA -$numValueB;
+            }
+
+            return 0;
         });
     }
 

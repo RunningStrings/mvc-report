@@ -30,9 +30,8 @@
 }
 
 .footer .social a {
-    display: none;
     color: $font-alternative-color;
-    // display: inline-block;
+    display: inline-block;
     text-decoration: none;
     transition: transform 0.1s ease;
 
@@ -48,7 +47,6 @@
 }
 
 .footer .social .i a {
-    display: none;
     color: $link-color;
     
 
