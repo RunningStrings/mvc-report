@@ -13,8 +13,7 @@ class SessionController extends AbstractController
     #[Route("/session", name: "session")]
     public function printSession(
         SessionInterface $session
-    ): Response
-    {
+    ): Response {
         $data = [
             "session" => $session->all(),
             "metadata" => $this->loadMetaData(),
@@ -32,8 +31,7 @@ class SessionController extends AbstractController
     #[Route("/session/delete", name: "session_delete")]
     public function deleteSession(
         SessionInterface $session
-    ): Response
-    {
+    ): Response {
         $session->clear();
         $this->addFlash(
             'notice',

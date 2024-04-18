@@ -16,9 +16,10 @@ class CardGraphic extends Card
 
         $cardClass = "card-" . $suit . $value;
 
-        return sprintf('<i class="card-sprite %s"></i>',
-        $cardClass
-    );
+        return sprintf(
+            '<i class="card-sprite %s"></i>',
+            $cardClass
+        );
     }
 
 }

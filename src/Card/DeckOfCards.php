@@ -43,13 +43,13 @@ class DeckOfCards
 
 
         $valueMap = [
-                '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' =>5,
+                '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5,
                 '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10,
-                'Jack' => 11, 'Queen' => 12, 'King'=> 13,
+                'Jack' => 11, 'Queen' => 12, 'King' => 13,
             ];
 
-        
-        usort($this->cards, function($a, $b) use ($suitMap, $valueMap) {
+
+        usort($this->cards, function ($a, $b) use ($suitMap, $valueMap) {
             $suitValueA = $suitMap[$a->getSuit()] ?? 0;
             $suitValueB = $suitMap[$b->getSuit()] ?? 0;
 
@@ -61,7 +61,7 @@ class DeckOfCards
             }
 
             if ($numValueA != $numValueB) {
-                return $numValueA -$numValueB;
+                return $numValueA - $numValueB;
             }
 
             return 0;
