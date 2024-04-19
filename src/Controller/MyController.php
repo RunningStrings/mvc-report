@@ -127,9 +127,11 @@ class MyController extends AbstractController
         foreach ($routes as $name => $route) {
             $controller = $route->getDefault('_controller');
             if (str_contains($controller, 'json')) {
+                $description = $route->getOption('description', '');
                 $jsonRoutes[] = [
                     'name' => $name,
                     'path' => $route->getPath(),
+                    'description' => $description,
                 ];
             }
         }
@@ -142,7 +144,7 @@ class MyController extends AbstractController
         ]);
     }
 
-    #[Route("/api/quote", name: "api_quote")]
+    #[Route("/api/quote", name: "api_quote", options: ['description' => 'Get a random quote of the day.'])]
     public function jsonQuote(): Response
     {
         // Generate cache key

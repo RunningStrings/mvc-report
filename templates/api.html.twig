@@ -6,7 +6,7 @@
     <h1>Tillgängliga JSON routes</h1>
     <ul>
         {% for route in jsonRoutes %}
-            <li><a href="{{ path(route.name) }}">{{ route.path }}</a></li>
+            <li><a href="{{ path(route.name) }}">{{ route.path }}</a>: {{ route.description }}</li>
         {% endfor %}
     </ul>
 {% endblock %}
