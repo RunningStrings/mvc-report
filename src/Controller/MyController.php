@@ -144,7 +144,11 @@ class MyController extends AbstractController
         ]);
     }
 
-    #[Route("/api/quote", name: "api_quote", options: ['description' => 'Get a random quote of the day.'])]
+    #[Route(
+        "/api/quote",
+        name: "api_quote",
+        options: ['description' => 'Get a random quote of the day.']
+        )]
     public function jsonQuote(): Response
     {
         // Generate cache key
