@@ -30,6 +30,15 @@ class DeckOfCards
         return $this->cards;
     }
 
+    public function getDeckStringArray()
+    {
+        $deck = [];
+        foreach ($this->cards as $card) {
+            $deck[] = $card->getValue() . ' of ' . $card->getSuit();
+        }
+        return $deck;
+    }
+
     public function shuffleDeck()
     {
         shuffle($this->cards);
