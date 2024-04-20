@@ -1,0 +1,14 @@
+.api-button {
+    border: 1px solid $accent-color;
+    border-radius: 5px;
+    color: $link-color;
+    font-family: $header-font;
+    font-size: 1.2em;
+    transition: color 0.1s;
+    padding: 0.5em;
+
+    &:hover {
+        color: $accent-color;
+        outline: 2px solid $accent-color;
+    }
+}
