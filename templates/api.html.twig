@@ -4,22 +4,38 @@
 
 {% block body %}
     <h1>Tillgängliga JSON routes</h1>
-    <ul>
-        {% for route in jsonRoutes %}
-            <li>
-                {% if 'number' in route.path %}
-                    <form action="{{ path(route.name, { 'number': 4 }) }}" method="{{ route.method }}">
-                        <label for="numberInput">Number of cards:</label>
-                        <input type="number" id="numberInput" name="number" value="4">
-                        <button class="api-button" type="submit">{{ route.path }}</button>
-                    </form>
-                {% else %}
-                    <form action="{{ path(route.name) }}" method="{{ route.method }}">
-                        <button class="api-button" type="submit">{{ route.path }}</button>
-                    </form>
-                {% endif %}
-                <span>{{ route.description }}</span>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="api-wrapper">
+            {% for route in jsonRoutes %}
+                <div class="api-item">
+                    {% if 'number' in route.path %}
+                        <form action="{{ path(route.name, { 'number': 4 }) }}" method="{{ route.method }}">
+                            <button class="api-button" type="submit">{{ route.path }}</button>
+                            <span class="api-number-input">
+                                <label for="numberInput">Antal kort:</label>
+                                <input type="number" id="numberInput" name="number" value="4">
+                            </span>
+                        </form>
+                    {% else %}
+                        {% if 'players' in route.path %}
+                            <form action="{{ path(route.name, { 'players': 4, 'cards': 5 }) }}" method="{{ route.method }}">
+                                <button class="api-button" type="submit">{{ route.path }}</button>
+                                <span class="api-number-input">
+                                    <label for="playerInput">Antal spelare:</label>
+                                    <input type="number" id="playerInput" name="players" value="4">
+                                </span>
+                                <span class="api-number-input">
+                                    <label for="cardInput">Antal kort:</label>
+                                    <input type="number" id="cardInput" name="cards" value="5">
+                                </span>
+                            </form>
+                        {% else %}
+                            <form action="{{ path(route.name) }}" method="{{ route.method }}">
+                                <button class="api-button" type="submit">{{ route.path }}</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                    <span>{{ route.description }}</span>
+                </div>
+            {% endfor %}
+    </div>
 {% endblock %}
