@@ -13,11 +13,11 @@
     border: 1px solid lighten($background-header-footer, 25%);
     border-radius: 5px;
     padding: 0.4em;
-    max-width: 22em;
+    max-width: 24em;
 }
 
 .api-item span {
-    width: 22rem;
+    width: 24rem;
 }
 
 .api-button {
@@ -30,7 +30,7 @@
     transition: color 0.1s;
     padding: 0.5em;
     margin-bottom: 0.4em;
-    width: 22rem;
+    width: 24rem;
 
     &:hover {
         color: $accent-color;
@@ -47,7 +47,7 @@
     color: $link-color;
     font-family: $header-font;
     margin-bottom: 0.4em;
-    width: 22rem;
+    width: 24rem;
 
     &:hover {
         color: $accent-color;
