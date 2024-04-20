@@ -13,10 +13,10 @@ class DeckOfCards
         $this->createDeck();
     }
 
-    private function createDeck()
+    private function createDeck(): void
     {
         $suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-        $values = ['1','2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'];
+        $values = ['Ace','2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King'];
 
         foreach ($suits as $suit) {
             foreach ($values as $value) {
@@ -25,7 +25,7 @@ class DeckOfCards
         }
     }
 
-    public function getDeck()
+    public function getDeck(): array
     {
         return $this->cards;
     }
@@ -39,12 +39,12 @@ class DeckOfCards
         return $deck;
     }
 
-    public function shuffleDeck()
+    public function shuffleDeck(): void
     {
         shuffle($this->cards);
     }
 
-    public function sortDeck()
+    public function sortDeck(): void
     {
         $suitMap = [
                 'Hearts' => 1, 'Diamonds' => 2, 'Clubs' => 3, 'Spades' => 4,
@@ -52,7 +52,7 @@ class DeckOfCards
 
 
         $valueMap = [
-                '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5,
+                'Ace' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5,
                 '6' => 6, '7' => 7, '8' => 8, '9' => 9, '10' => 10,
                 'Jack' => 11, 'Queen' => 12, 'King' => 13,
             ];
@@ -77,7 +77,7 @@ class DeckOfCards
         });
     }
 
-    public function draw()
+    public function draw(): ?Card
     {
         return array_shift($this->cards);
     }
