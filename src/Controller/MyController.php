@@ -150,7 +150,7 @@ class MyController extends AbstractController
     #[Route(
         "/api/quote",
         name: "api_quote",
-        options: ['description' => 'Get a random quote of the day.']
+        options: ['description' => 'Visa dagens citat.']
         )]
     public function jsonQuote(): Response
     {
