@@ -132,16 +132,19 @@ class MyController extends AbstractController
                     'name' => $name,
                     'path' => $route->getPath(),
                     'description' => $description,
+                    'method' => implode(', ', $route->getMethods()),
                 ];
             }
         }
 
         $metadata = $this->loadMetaData();
 
-        return $this->render('api.html.twig', [
+        $data = [
             'jsonRoutes' => $jsonRoutes,
-            'metadata' => $metadata,
-        ]);
+            'metadata' => $metadata
+        ];
+
+        return $this->render('api.html.twig', $data);
     }
 
     #[Route(
