@@ -23,6 +23,13 @@ img {
     }
 }
 
+.uml-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 1.4em;
+}
+
 .unfiltered-small {
     margin-bottom: 5px;
     max-width: 250px;

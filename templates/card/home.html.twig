@@ -22,9 +22,10 @@
             indirekt till Card, genom komposition.
         </p>
         <p>
-            Ett CardHand-objekt håller en array bestående av Card-objekt, och är konstruerat med en 
-            referens till ett DeckOfCards-objekt, vilket gör att CardHand har 
-            kompositionsförhållande till både Card och DeckOfCards.
+            Ett CardHand-objekt håller en array bestående av 
+            Card-objekt från ett DeckOfCards-objekt, vilket gör att 
+            CardHand har ett kompositionsförhållande till DeckOfCards, 
+            men därigenom också är relaterat till Card.
         </p>
     </div>
     <div class="col-right">
@@ -47,6 +48,10 @@
         </div>
     </div>
 </div>
+<div class="uml-wrapper">
+    <img src="{{ asset('img/uml_mvc2.jpg')}}" alt="UML-diagram">
+</div>
+
 
 {% block main %}{% endblock %}
 
