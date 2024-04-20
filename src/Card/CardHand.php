@@ -12,18 +12,27 @@ class CardHand
         $this->deck = $deck;
     }
 
-    public function addCard(Card $card)
+    public function addCard(Card $card): void
     {
         $this->cards[] = $card;
     }
 
-    public function getHand()
+    public function getHand(): array
     {
         return $this->cards;
     }
 
-    public function clearHand()
+    public function clearHand(): void
     {
         $this->cards = [];
+    }
+
+    public function toHandArray(): array
+    {
+        $handArray = [];
+        foreach ($this->cards as $card) {
+            $handArray[] = $card->getValue() . ' of ' . $card->getSuit();
+        }
+        return $handArray;
     }
 }
