@@ -1,0 +1,11 @@
+<form action="{{ path(route.name, { 'players': 4, 'cards': 5 }) }}" method="{{ route.method }}">
+    <button class="api-button" type="submit">{{ route.path }}</button>
+    <span class="api-number-input">
+        <label for="playerInput">Antal spelare:</label>
+        <input type="number" id="playerInput" name="players" value="4">
+    </span>
+    <span class="api-number-input">
+        <label for="cardInput">Antal kort:</label>
+        <input type="number" id="cardInput" name="cards" value="5">
+    </span>
+</form>

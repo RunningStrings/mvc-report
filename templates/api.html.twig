@@ -8,30 +8,12 @@
             {% for route in jsonRoutes %}
                 <div class="api-item">
                     {% if 'number' in route.path %}
-                        <form action="{{ path(route.name, { 'number': 4 }) }}" method="{{ route.method }}">
-                            <button class="api-button" type="submit">{{ route.path }}</button>
-                            <span class="api-number-input">
-                                <label for="numberInput">Antal kort:</label>
-                                <input type="number" id="numberInput" name="number" value="4">
-                            </span>
-                        </form>
+                        {% include 'form_number.html.twig' %}
                     {% else %}
                         {% if 'players' in route.path %}
-                            <form action="{{ path(route.name, { 'players': 4, 'cards': 5 }) }}" method="{{ route.method }}">
-                                <button class="api-button" type="submit">{{ route.path }}</button>
-                                <span class="api-number-input">
-                                    <label for="playerInput">Antal spelare:</label>
-                                    <input type="number" id="playerInput" name="players" value="4">
-                                </span>
-                                <span class="api-number-input">
-                                    <label for="cardInput">Antal kort:</label>
-                                    <input type="number" id="cardInput" name="cards" value="5">
-                                </span>
-                            </form>
+                            {% include 'form_player.html.twig' %}
                         {% else %}
-                            <form action="{{ path(route.name) }}" method="{{ route.method }}">
-                                <button class="api-button" type="submit">{{ route.path }}</button>
-                            </form>
+                            {% include 'form_default.html.twig' %}
                         {% endif %}
                     {% endif %}
                     <span>{{ route.description }}</span>
