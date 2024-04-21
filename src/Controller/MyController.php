@@ -151,7 +151,7 @@ class MyController extends AbstractController
         "/api/quote",
         name: "api_quote",
         options: ['description' => 'Visa dagens citat.']
-        )]
+    )]
     public function jsonQuote(): Response
     {
         // Generate cache key

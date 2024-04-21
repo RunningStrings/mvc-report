@@ -26,11 +26,10 @@ class CardGameApiController extends AbstractController
         name: "api_deck",
         methods: ['GET'],
         options: ['description' => 'Visar en komplett, sorterad kortlek och lagrar den i sessionen.']
-        )]
+    )]
     public function jsonDeck(
         SessionInterface $session
-    ): Response
-    {
+    ): Response {
         $deck = new DeckOfCards();
         $session->set("deck", $deck);
 
@@ -54,8 +53,7 @@ class CardGameApiController extends AbstractController
     )]
     public function jsonShuffle(
         SessionInterface $session
-    ): Response
-    {
+    ): Response {
         $deck = $session->get("deck");
         if (!$deck || count($deck->getDeck()) === 0) {
             $deck = new DeckOfCards();
@@ -86,8 +84,7 @@ class CardGameApiController extends AbstractController
     )]
     public function jsonDraw(
         SessionInterface $session,
-    ): Response
-    {
+    ): Response {
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -99,11 +96,11 @@ class CardGameApiController extends AbstractController
         $card = $deck->draw();
         if (!$card) {
             $response = new JsonResponse('Inga kort kvar i leken.');
-                $response->setEncodingOptions(
-                    $response->getEncodingOptions() | JSON_PRETTY_PRINT
-                );
-        
-                return $response;
+            $response->setEncodingOptions(
+                $response->getEncodingOptions() | JSON_PRETTY_PRINT
+            );
+
+            return $response;
         }
 
         $session->set("deck", $deck);
@@ -130,8 +127,7 @@ class CardGameApiController extends AbstractController
     public function jsonDrawNum(
         Request $request,
         SessionInterface $session
-    ): Response
-    {
+    ): Response {
         $number = $request->request->get('number');
         $deck = $session->get("deck");
 
@@ -180,8 +176,7 @@ class CardGameApiController extends AbstractController
     public function jsonDealCards(
         Request $request,
         SessionInterface $session
-    ): Response 
-    {
+    ): Response {
         $cards = $request->request->get('cards');
         $players = $request->request->get('players');
         $deck = $session->get("deck");
