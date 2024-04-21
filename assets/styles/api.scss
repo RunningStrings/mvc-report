@@ -18,6 +18,10 @@
 
 .api-item span {
     width: 24rem;
+
+    @media screen and (max-width: 600px) {
+        max-width: 22em;
+    }
 }
 
 .api-button {
@@ -31,6 +35,10 @@
     padding: 0.5em;
     margin-bottom: 0.4em;
     width: 24rem;
+
+    @media screen and (max-width: 600px) {
+        max-width: 22em;
+    }
 
     &:hover {
         color: $accent-color;
@@ -48,6 +56,10 @@
     font-family: $header-font;
     margin-bottom: 0.4em;
     width: 24rem;
+
+    @media screen and (max-width: 600px) {
+        max-width: 22em;
+    }
 
     &:hover {
         color: $accent-color;
