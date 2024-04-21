@@ -1,3 +1,84 @@
 <a id="kmom02"></a>Kmom02
 --------------------------
-Redovisningstext
+Då det här kursmomentet har handlat om objektorientering, har vi 
+fått lära oss om en rad olika objektorienterade konstruktioner:
+
+##### Arv
+Ett arvsförhållande föreligger när en klass förlänger eller 
+specialiserar en annan klass, och ärver den andra klassens metoder 
+och egenskaper. Som exempel kan ges CardGraphic-klassen, som 
+förlänger Card-klassen genom att ge grafisk representation till 
+Card-objekt, och ärver Card-klassens publika och 
+skyddade metoder och egenskaper. 
+
+##### Komposition
+CardGraphic-klassen anropas av DeckOfCards-klassen, för att skapa 
+en kortlek - ett DeckOfCards-objekt -  bestående av spelkort - 
+CardGraphic-objekt - och DeckOfCards har således ett 
+kompositionsförhållande till CardGraphic. Komposition innebär att 
+en klass innehåller eller använder en annan klass, och består av 
+objekt tillhörande den andra klassen.
+
+##### Interface
+Ett interface definierar ett kontrakt för hur en klasstruktur skall 
+se ut. Det specificerar vilka metoder en klass måste tillhandahålla, 
+utan att definiera hur metoderna skall implementeras. När flera 
+klasser implementerar ett visst interface och följer kontraktet, 
+leder det till enhetlig användning av metodnamn och argument. Detta 
+möjliggör polymorfism, dvs att objekt tillhörande olika klasser 
+kan hanteras på samma sätt, tack vare deras gemensamma interface. 
+Kod kan på så sätt göras mer flexibel.
+
+##### Trait
+Viss kod kan vara användbar i flera olika klasser, och denna kan 
+brytas ut och läggas i ett trait. När man sedan använder detta trait 
+i en klass är det som om koden kopieras in i klassen. Trait är ett flexibelt 
+alternativ till arv beträffande delning av metoder mellan klasser, 
+och där en klass endast kan ärva från en annan klass, kan en klass 
+använda sig av flera traits. Detta öppnar dock för möjligheten till 
+namnkonflikter avseende metodnamn - något man bör ha i åtanke.
+
+##### Implementation
+För att lösa uppgiften utgick jag till att börja med från 
+Dice-klasserna och tillhörande controller från övningen - steget 
+från tärningar till kortlekar är ju inte så långt. Jag började med 
+klasserna Card och DeckOfCards, och route för deck, för att skapa 
+kortleken med hjälp av arrayerna för färg och valör, och la ganska 
+snart till CardGraphic som förlängning av Card-klassen för att jag 
+ville ha tydliga, visuella kort att jobba med. Efter en del trassel 
+med att få bakgrundsbilden till spelkorten synlig (tills vidare 
+löst genom manuell redigering av den genererade CSS-filen) gick 
+jag vidare, och la till routes och metoder för att blanda och dra 
+kort, därefter CardHand-klassen och möjligheten att dela ut kort 
+till spelare. 
+
+JSON API-delen av uppgiften var till viss del enklare, då en stor 
+del av arbetet redan var gjort i och med färdiga klasser och 
+metoder, men samtidigt krävdes en del funderande kring hur det 
+skulle fungera med POST, och hur variabler och värden skulle hamna 
+rätt i controllern. Jag la också en del tid på att få API-sidan 
+funktionell (och lite fin), med dynamiskt genererade formulär. Här 
+använde jag Symfonys LoggerInterface för att felsöka - smidigt 
+alternativ till var_dump.
+
+Med all säkerhet skulle min kod kunna förbättras på många sätt, 
+till exempel genom användandet av interface och trait - vissa 
+kodpartier skulle kunna läggas i trait och återanvändas - men 
+jag är ändå nöjd så här långt. 
+
+##### Symfony och MVC
+Symfony och MVC är hittills trevligt överlag - det finns många 
+inbyggda funktioner och verktyg, och uppdelningen i MVC gör det 
+hela överskådligt. Dock har jag, som flera andra, stött på problem 
+när det gäller vissa assets, som till exempel bakgrundsbilder 
+definierade i CSS/SCSS. Jag har förstått det som att problemet 
+verkar komma av samtidig användning av Encore och AssetMapper, men 
+i och med att det kan kringgås genom redigering av den genererade 
+CSS-filen har jag valt att i nuläget jobba på framåt. Dock är det 
+ju ett bevis på att ramverk kommer med både möjligheter och 
+begränsningar, och möjligheter till konflikter mellan olika verktyg.
+
+##### TIL
+Min TIL för kursmomentet är interface och trait och hur de används. 
+Nu vågade jag mig inte på att implementera dem i det här kursmomentet, 
+men jag räknar med att tillfälle kommer att ges!
