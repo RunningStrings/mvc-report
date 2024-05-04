@@ -81,4 +81,9 @@ class DeckOfCards
     {
         return array_shift($this->cards);
     }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->cards);
+    }
 }
