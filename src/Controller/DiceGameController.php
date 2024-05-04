@@ -15,6 +15,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class DiceGameController extends AbstractController
 {
+    private $yamlParser;
+
+    public function __construct(Yaml $yamlParser)
+    {
+        $this->yamlParser = $yamlParser;
+    }
+
     #[Route("/game/pig", name: "pig_start")]
     public function home(): Response
     {
@@ -25,7 +32,8 @@ class DiceGameController extends AbstractController
 
     private function loadMetaData()
     {
-        $metadata = Yaml::parseFile('../config/metadata.yaml');
+        // $metadata = Yaml::parseFile('../config/metadata.yaml');
+        $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         return $metadata['metadata'] ?? [];
     }
 
