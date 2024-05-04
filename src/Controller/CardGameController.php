@@ -12,6 +12,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class CardGameController extends AbstractController
 {
+    private $yamlParser;
+
+    public function __construct(Yaml $yamlParser)
+    {
+        $this->yamlParser = $yamlParser;
+    }
+
     #[Route("/card", name: "card")]
     public function card(): Response
     {
@@ -259,7 +266,8 @@ class CardGameController extends AbstractController
 
     private function loadMetaData()
     {
-        $metadata = Yaml::parseFile('../config/metadata.yaml');
+        // $metadata = Yaml::parseFile('../config/metadata.yaml');
+        $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         return $metadata['metadata'] ?? [];
     }
 }
