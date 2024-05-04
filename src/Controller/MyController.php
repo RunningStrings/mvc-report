@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -170,7 +171,7 @@ class MyController extends AbstractController
                 'timestamp' => date('Y-m-d H:i:s'),
             ];
             // Store generated quote in cache until end of day
-            $item->expiresAt(new \DateTime('tomorrow'));
+            $item->expiresAt(new DateTime('tomorrow'));
             $item->set($quoteData);
 
             return $quoteData;
