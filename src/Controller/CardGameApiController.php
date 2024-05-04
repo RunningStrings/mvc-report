@@ -55,11 +55,8 @@ class CardGameApiController extends AbstractController
         SessionInterface $session
     ): Response {
         $deck = $session->get("deck");
-        if (!$deck || count($deck->getDeck()) === 0) {
+        if (!$deck || $deck->isEmpty()) {
             $deck = new DeckOfCards();
-            // $deck->shuffleDeck();
-            // $session->set("deck", $deck);
-        // } else {
         }
         $deck->shuffleDeck();
         $session->set("deck", $deck);
@@ -150,17 +147,6 @@ class CardGameApiController extends AbstractController
 
             $drawnCard = $deck->draw();
             $drawnCards[] = $drawnCard->getValue() . ' of ' . $drawnCard->getSuit();
-            // $drawnCard = $deck->draw();
-            // if ($drawnCard) {
-            //     $drawnCards[] = $drawnCard->getValue() . ' of ' . $drawnCard->getSuit();
-            // } else {
-            //     $response = new JsonResponse('Inga kort kvar i leken.');
-            //     $response->setEncodingOptions(
-            //         $response->getEncodingOptions() | JSON_PRETTY_PRINT
-            //     );
-
-            //     return $response;
-            // }
         }
 
         $session->set("deck", $deck);
@@ -220,21 +206,6 @@ class CardGameApiController extends AbstractController
                 $hand->addCard($card);
             }
         }
-        // for ($i = 0; $i < $cards; $i++) {
-        //     foreach ($playerHands as $player => $hand) {
-        //         $card = $deck->draw();
-        //         if ($card) {
-        //             $hand->addCard($card);
-        //         } else {
-        //             $response = new JsonResponse('Inga kort kvar i leken.');
-        //             $response->setEncodingOptions(
-        //                 $response->getEncodingOptions() | JSON_PRETTY_PRINT
-        //             );
-
-        //             return $response;
-        //         }
-        //     }
-        // }
 
         $remainingCards = count($deck->getDeck());
 
