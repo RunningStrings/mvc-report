@@ -32,16 +32,14 @@ class CardGameController extends AbstractController
         if (!$deck) {
             $deck = new DeckOfCards();
             $session->set("deck", $deck);
-        } else {
-            if (count($deck->getDeck()) === 0) {
-                $this->addFlash(
-                    'warning',
-                    'Alla kort i leken har dragits!'
-                );
-            } else {
-                $deck->sortDeck();
-            }
         }
+        if ($deck->isEmpty()) {
+            $this->addFlash(
+                'warning',
+                'Alla kort i leken har dragits!'
+            );
+        }
+        $deck->sortDeck();
 
         $data = [
             "deck" => $deck->getDeck(),
@@ -58,12 +56,11 @@ class CardGameController extends AbstractController
     ): Response {
         $deck = $session->get("deck");
 
-        if (!$deck || count($deck->getDeck()) === 0) {
+        if (!$deck || $deck->isEmpty()) {
             $deck = new DeckOfCards();
             $deck->shuffleDeck();
-        } else {
-            $deck->shuffleDeck();
         }
+        $deck->shuffleDeck();
 
         $session->set("deck", $deck);
 
@@ -137,14 +134,17 @@ class CardGameController extends AbstractController
         $remainingCards = max(0, $remainingCards - $number);
 
         $drawnCards = [];
-        for ($i = 0; $i < $number; $i++) {
-            $drawnCard = $deck->draw();
-            if ($drawnCard) {
-                $drawnCards[] = $drawnCard;
-            } else {
-                break;
-            }
+        for ($i = 0; $i < $number && ($drawnCard = $deck->draw()); $i++) {
+            $drawnCards[] = $drawnCard;
         }
+        // for ($i = 0; $i < $number; $i++) {
+        //     $drawnCard = $deck->draw();
+        //     if ($drawnCard) {
+        //         $drawnCards[] = $drawnCard;
+        //     } else {
+        //         break;
+        //     }
+        // }
 
         $session->set("deck", $deck);
 
@@ -179,19 +179,32 @@ class CardGameController extends AbstractController
         }
 
         for ($i = 0; $i < $cards; $i++) {
-            foreach ($playerHands as $playerHand) {
-                $card = $deck->draw();
-                if ($card) {
-                    $playerHand->addCard($card);
-                } else {
+            foreach ( $playerHands as $playerHand) {
+                if ($deck->isEmpty()) {
                     $this->addFlash(
                         'warning',
                         'Alla kort i leken har dragits!'
                     );
                     break 2;
                 }
+                $card = $deck->draw();
+                $playerHand->addCard($card);
             }
         }
+        // for ($i = 0; $i < $cards; $i++) {
+        //     foreach ($playerHands as $playerHand) {
+        //         $card = $deck->draw();
+        //         if ($card) {
+        //             $playerHand->addCard($card);
+        //         } else {
+        //             $this->addFlash(
+        //                 'warning',
+        //                 'Alla kort i leken har dragits!'
+        //             );
+        //             break 2;
+        //         }
+        //     }
+        // }
 
         $remainingCards = count($deck->getDeck());
 
