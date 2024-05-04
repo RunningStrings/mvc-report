@@ -58,12 +58,12 @@ class DeckOfCards
             ];
 
 
-        usort($this->cards, function ($a, $b) use ($suitMap, $valueMap) {
-            $suitValueA = $suitMap[$a->getSuit()] ?? 0;
-            $suitValueB = $suitMap[$b->getSuit()] ?? 0;
+        usort($this->cards, function ($cardA, $cardB) use ($suitMap, $valueMap) {
+            $suitValueA = $suitMap[$cardA->getSuit()] ?? 0;
+            $suitValueB = $suitMap[$cardB->getSuit()] ?? 0;
 
-            $numValueA = $valueMap[$a->getValue()] ?? 0;
-            $numValueB = $valueMap[$b->getValue()] ?? 0;
+            $numValueA = $valueMap[$cardA->getValue()] ?? 0;
+            $numValueB = $valueMap[$cardB->getValue()] ?? 0;
 
             if ($suitValueA != $suitValueB) {
                 return $suitValueA - $suitValueB;
