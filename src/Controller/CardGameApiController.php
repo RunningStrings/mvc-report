@@ -140,7 +140,7 @@ class CardGameApiController extends AbstractController
 
         $drawnCards = [];
         for ($i = 0; $i < $number; $i++) {
-            if (count($deck->getDeck()) === 0) {
+            if ($deck->isEmpty()) {
                 $response = new JsonResponse('Inga kort kvar i leken.');
                 $response->setEncodingOptions(
                     $response->getEncodingOptions() | JSON_PRETTY_PRINT
@@ -208,7 +208,7 @@ class CardGameApiController extends AbstractController
 
         foreach ($playerHands as $player => $hand) {
             for ($i = 0; $i <$cards; $i++) {
-                if (count($deck->getDeck()) === 0) {
+                if ($deck->isEmpty()) {
                     $response = new JsonResponse('Inga kort kvar i leken.');
                     $response->setEncodingOptions(
                         $response->getEncodingOptions() | JSON_PRETTY_PRINT
