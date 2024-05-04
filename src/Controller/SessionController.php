@@ -10,6 +10,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class SessionController extends AbstractController
 {
+    private $yamlParser;
+
+    public function __construct(Yaml $yamlParser)
+    {
+        $this->yamlParser = $yamlParser;
+    }
+
     #[Route("/session", name: "session")]
     public function printSession(
         SessionInterface $session
@@ -24,7 +31,8 @@ class SessionController extends AbstractController
 
     private function loadMetaData()
     {
-        $metadata = Yaml::parseFile('../config/metadata.yaml');
+        // $metadata = Yaml::parseFile('../config/metadata.yaml');
+        $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         return $metadata['metadata'] ?? [];
     }
 
