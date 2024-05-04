@@ -16,10 +16,12 @@ class MyController extends AbstractController
 {
     // Inject CacheInterface
     private $cache;
+    private $yamlParser;
 
-    public function __construct(CacheInterface $cache)
+    public function __construct(CacheInterface $cache, Yaml $yamlParser)
     {
         $this->cache = $cache;
+        $this->yamlParser = $yamlParser;
     }
 
     #[Route("/", name: "home")]
@@ -186,14 +188,16 @@ class MyController extends AbstractController
 
     private function loadQuotes(): array
     {
-        $quotesData = Yaml::parseFile('../config/quotes.yaml');
+        // $quotesData = Yaml::parseFile('../config/quotes.yaml');
+        $quotesData = $this->yamlParser->parseFile('../config/quotes.yaml');
 
         return $quotesData['quotes'] ?? [];
     }
 
     private function loadMetaData()
     {
-        $metadata = Yaml::parseFile('../config/metadata.yaml');
+        // $metadata = Yaml::parseFile('../config/metadata.yaml');
+        $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         return $metadata['metadata'] ?? [];
     }
 }
