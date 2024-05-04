@@ -4,8 +4,8 @@ namespace App\Card;
 
 class Card
 {
-    protected $suit;
-    protected $value;
+    protected  string $suit;
+    protected string $value;
 
     public function __construct(string $suit, string $value)
     {
