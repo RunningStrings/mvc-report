@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class DiceGameController extends AbstractController
 {
-    private $yamlParser;
+    private Yaml $yamlParser;
 
     public function __construct(Yaml $yamlParser)
     {
@@ -31,10 +31,16 @@ class DiceGameController extends AbstractController
         return $this->render('pig/home.html.twig', ['metadata' => $metadata]);
     }
 
-    private function loadMetaData()
+    /**
+     * @return array<string>
+     */
+    private function loadMetaData():array
     {
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
-        return $metadata['metadata'] ?? [];
+        if (is_array($metadata)) {
+            return $metadata['metadata'] ?? [];
+        }
+        return [];
     }
 
     #[Route("/game/pig/test/roll", name: "test_roll_dice")]
@@ -133,15 +139,20 @@ class DiceGameController extends AbstractController
 
     #[Route("/game/pig/play", name: "pig_play", methods: ['GET'])]
     public function play(
-        SessionInterface $session
+        SessionInterface $session,
+        DiceHand $dicehand
     ): Response {
         $dicehand = $session->get("pig_dicehand");
+        if ($dicehand instanceof DiceHand) {
+            $diceValues = $dicehand->getString();
+        }
+        $diceValues = [];
 
         $data = [
             "pigDices" => $session->get("pig_dices"),
             "pigRound" => $session->get("pig_round"),
             "pigTotal" => $session->get("pig_total"),
-            "diceValues" => $dicehand->getString(),
+            "diceValues" => $diceValues,
             "metadata" => $this->loadMetaData(),
         ];
 
@@ -150,25 +161,31 @@ class DiceGameController extends AbstractController
 
     #[Route("/game/pig/roll", name: "pig_roll", methods: ['POST'])]
     public function roll(
-        SessionInterface $session
+        SessionInterface $session,
+        DiceHand $hand
     ): Response {
         $hand = $session->get("pig_dicehand");
-        $hand->roll();
+        if ($hand instanceof DiceHand) {
+            $hand->roll();
+        }
 
         $roundTotal = $session->get("pig_round");
         $round = 0;
-        $values = $hand->getValues();
-        foreach ($values as $value) {
-            if ($value === 1) {
-                $round = 0;
-                $roundTotal = 0;
-                $this->addFlash(
-                    'warning',
-                    'You got a 1 and you lost the round points!'
-                );
-                break;
+        if ($hand instanceof DiceHand) {
+            $values = $hand->getValues();
+
+            foreach ($values as $value) {
+                if ($value === 1) {
+                    $round = 0;
+                    $roundTotal = 0;
+                    $this->addFlash(
+                        'warning',
+                        'You got a 1 and you lost the round points!'
+                    );
+                    break;
+                }
+                $round += $value;
             }
-            $round += $value;
         }
 
         $session->set("pig_round", $roundTotal + $round);

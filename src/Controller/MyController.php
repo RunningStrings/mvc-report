@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,8 +17,8 @@ use Symfony\Contracts\Cache\ItemInterface;
 class MyController extends AbstractController
 {
     // Inject CacheInterface
-    private $cache;
-    private $yamlParser;
+    private CacheInterface $cache;
+    private Yaml $yamlParser;
 
     public function __construct(CacheInterface $cache, Yaml $yamlParser)
     {
@@ -81,6 +82,11 @@ class MyController extends AbstractController
     private function getHeaderFromFile(string $filePath): string
     {
         $content = file_get_contents($filePath);
+
+        if ($content === false) {
+            throw new Exception('Kunde inte läsa filen: $filepath');
+        }
+
         $lines = explode("\n", $content);
         $headerLine = $lines[0];
         $header = trim(strip_tags($headerLine));
@@ -129,8 +135,8 @@ class MyController extends AbstractController
         $jsonRoutes = [];
         foreach ($routes as $name => $route) {
             $controller = $route->getDefault('_controller');
-            if (str_contains($controller, 'json')) {
-                $description = $route->getOption('description', '');
+            if (is_string($controller) && str_contains($controller, 'json')) {
+                $description = $route->getOption('description');
                 $jsonRoutes[] = [
                     'name' => $name,
                     'path' => $route->getPath(),
@@ -187,18 +193,28 @@ class MyController extends AbstractController
         return $response;
     }
 
+    /**
+     * @return array<array<string, mixed>>
+     */
     private function loadQuotes(): array
     {
-        // $quotesData = Yaml::parseFile('../config/quotes.yaml');
         $quotesData = $this->yamlParser->parseFile('../config/quotes.yaml');
 
-        return $quotesData['quotes'] ?? [];
+        if(is_array($quotesData) && isset($quotesData['quotes'])) {
+            return $quotesData['quotes'];
+        }
+        return [];
     }
 
-    private function loadMetaData()
+    /**
+     * @return array<string>
+     */
+    private function loadMetaData():array
     {
-        // $metadata = Yaml::parseFile('../config/metadata.yaml');
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
-        return $metadata['metadata'] ?? [];
+        if (is_array($metadata)) {
+            return $metadata['metadata'] ?? [];
+        }
+        return [];
     }
 }

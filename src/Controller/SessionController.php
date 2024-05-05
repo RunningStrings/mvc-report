@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class SessionController extends AbstractController
 {
-    private $yamlParser;
+    private Yaml $yamlParser;
 
     public function __construct(Yaml $yamlParser)
     {
@@ -29,11 +29,16 @@ class SessionController extends AbstractController
         return $this->render('session.html.twig', $data);
     }
 
-    private function loadMetaData()
+    /**
+     * @return array<string>
+     */
+    private function loadMetaData():array
     {
-        // $metadata = Yaml::parseFile('../config/metadata.yaml');
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
-        return $metadata['metadata'] ?? [];
+        if (is_array($metadata)) {
+            return $metadata['metadata'] ?? [];
+        }
+        return [];
     }
 
     #[Route("/session/delete", name: "session_delete")]

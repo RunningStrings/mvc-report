@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class CardGameController extends AbstractController
 {
-    private $yamlParser;
+    private Yaml $yamlParser;
 
     public function __construct(Yaml $yamlParser)
     {
@@ -34,6 +34,7 @@ class CardGameController extends AbstractController
     public function deck(
         SessionInterface $session
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -61,6 +62,7 @@ class CardGameController extends AbstractController
     public function shuffleDeck(
         SessionInterface $session
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck || $deck->isEmpty()) {
@@ -84,6 +86,7 @@ class CardGameController extends AbstractController
     public function draw(
         SessionInterface $session
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -122,6 +125,7 @@ class CardGameController extends AbstractController
         int $number,
         SessionInterface $session
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -172,6 +176,7 @@ class CardGameController extends AbstractController
         int $cards,
         SessionInterface $session
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -195,7 +200,9 @@ class CardGameController extends AbstractController
                     break 2;
                 }
                 $card = $deck->draw();
-                $playerHand->addCard($card);
+                if ($card !== null) {
+                    $playerHand->addCard($card);
+                }
             }
         }
         // for ($i = 0; $i < $cards; $i++) {
@@ -264,10 +271,15 @@ class CardGameController extends AbstractController
         return $this->render('card/deck.html.twig', $data);
     }
 
-    private function loadMetaData()
+    /**
+     * @return array<string>
+     */
+    private function loadMetaData():array
     {
-        // $metadata = Yaml::parseFile('../config/metadata.yaml');
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
-        return $metadata['metadata'] ?? [];
+        if (is_array($metadata)) {
+            return $metadata['metadata'] ?? [];
+        }
+        return [];
     }
 }
