@@ -33,7 +33,6 @@ class DiceGameController extends AbstractController
 
     private function loadMetaData()
     {
-        // $metadata = Yaml::parseFile('../config/metadata.yaml');
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         return $metadata['metadata'] ?? [];
     }
@@ -61,7 +60,6 @@ class DiceGameController extends AbstractController
 
         $diceRoll = [];
         for ($i = 1; $i <= $num; $i++) {
-            // $die = new Dice();
             $die = new DiceGraphic();
             $die->roll();
             $diceRoll[] = $die->getAsString();
@@ -85,10 +83,7 @@ class DiceGameController extends AbstractController
 
         $hand = new DiceHand();
         for ($i = 1; $i <= $num; $i++) {
-            if ($i % 2 === 1) {
-                $hand->add(new DiceGraphic());
-            }
-            $hand->add(new Dice());
+            $hand->add($i % 2 === 1 ? new DiceGraphic() : new Dice());
         }
 
         $hand->roll();
@@ -178,10 +173,6 @@ class DiceGameController extends AbstractController
 
         $session->set("pig_round", $roundTotal + $round);
 
-        // $data = [
-        //     "metadata" => $this->loadMetaData(),
-        // ];
-
         return $this->redirectToRoute('pig_play');
     }
 
@@ -197,10 +188,6 @@ class DiceGameController extends AbstractController
             'notice',
             'Your round was saved to the total!'
         );
-
-        // $data = [
-        //     "metadata" => $this->loadMetaData(),
-        // ];
 
         return $this->redirectToRoute('pig_play');
     }
