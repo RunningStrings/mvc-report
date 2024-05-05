@@ -6,7 +6,10 @@ use App\Card\CardGraphic;
 
 class DeckOfCards
 {
-    protected $cards = [];
+    /**
+     * @var Card[]
+     */
+    protected array $cards = [];
 
     public function __construct()
     {
@@ -25,12 +28,18 @@ class DeckOfCards
         }
     }
 
+    /**
+     * @return Card[]
+     */
     public function getDeck(): array
     {
         return $this->cards;
     }
 
-    public function getDeckStringArray()
+    /**
+     * @return string []
+     */
+    public function getDeckStringArray(): array
     {
         $deck = [];
         foreach ($this->cards as $card) {
