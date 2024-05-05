@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CardGameApiController extends AbstractController
 {
+    /**
+     * @var LoggerInterface
+     */
     private $logger;
 
     public function __construct(LoggerInterface $logger)
@@ -54,6 +57,7 @@ class CardGameApiController extends AbstractController
     public function jsonShuffle(
         SessionInterface $session
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
         if (!$deck || $deck->isEmpty()) {
             $deck = new DeckOfCards();
@@ -83,6 +87,7 @@ class CardGameApiController extends AbstractController
     public function jsonDraw(
         SessionInterface $session,
     ): Response {
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -127,6 +132,7 @@ class CardGameApiController extends AbstractController
         SessionInterface $session
     ): Response {
         $number = $request->request->get('number');
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         if (!$deck) {
@@ -146,7 +152,9 @@ class CardGameApiController extends AbstractController
             }
 
             $drawnCard = $deck->draw();
-            $drawnCards[] = $drawnCard->getValue() . ' of ' . $drawnCard->getSuit();
+            if ($drawnCard !== null) {
+                $drawnCards[] = $drawnCard->getValue() . ' of ' . $drawnCard->getSuit();
+            }
         }
 
         $session->set("deck", $deck);
@@ -176,6 +184,7 @@ class CardGameApiController extends AbstractController
     ): Response {
         $cards = $request->request->get('cards');
         $players = $request->request->get('players');
+        /** @var DeckOfCards|null $deck */
         $deck = $session->get("deck");
 
         $this->logger->info('Value of $cards: ' . $cards);
@@ -189,7 +198,9 @@ class CardGameApiController extends AbstractController
 
         $playerHands = [];
         for ($i = 0; $i < $players; $i++) {
-            $playerHands["Spelare " . ($i + 1)] = new CardHand($deck);
+            if ($deck instanceof DeckOfCards) {
+                $playerHands["Spelare " . ($i + 1)] = new CardHand($deck);
+            }
         }
 
         foreach ($playerHands as $player => $hand) {
@@ -203,7 +214,9 @@ class CardGameApiController extends AbstractController
                 }
 
                 $card = $deck->draw();
-                $hand->addCard($card);
+                if ($card !== null) {
+                    $hand->addCard($card);
+                }
             }
         }
 
