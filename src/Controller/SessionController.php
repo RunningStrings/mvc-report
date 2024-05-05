@@ -32,7 +32,7 @@ class SessionController extends AbstractController
     /**
      * @return array<string>
      */
-    private function loadMetaData():array
+    private function loadMetaData(): array
     {
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         if (is_array($metadata)) {

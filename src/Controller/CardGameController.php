@@ -191,7 +191,7 @@ class CardGameController extends AbstractController
         }
 
         for ($i = 0; $i < $cards; $i++) {
-            foreach ( $playerHands as $playerHand) {
+            foreach ($playerHands as $playerHand) {
                 if ($deck->isEmpty()) {
                     $this->addFlash(
                         'warning',
@@ -274,7 +274,7 @@ class CardGameController extends AbstractController
     /**
      * @return array<string>
      */
-    private function loadMetaData():array
+    private function loadMetaData(): array
     {
         $metadata = $this->yamlParser->parseFile('../config/metadata.yaml');
         if (is_array($metadata)) {

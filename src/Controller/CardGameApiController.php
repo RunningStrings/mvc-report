@@ -204,7 +204,7 @@ class CardGameApiController extends AbstractController
         }
 
         foreach ($playerHands as $player => $hand) {
-            for ($i = 0; $i <$cards; $i++) {
+            for ($i = 0; $i < $cards; $i++) {
                 if ($deck->isEmpty()) {
                     $response = new JsonResponse('Inga kort kvar i leken.');
                     $response->setEncodingOptions(
