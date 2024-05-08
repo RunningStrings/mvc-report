@@ -1,0 +1,110 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Dokumentation{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<h2>Flödesschema</h2>
+<div class="flowchart-wrapper">
+    <img src="{{ asset('img/flowchart.png')}}" alt="Flowchart">
+</div>
+
+<h2>Pseudokod för en spelomgång</h2>
+<pre>
+<code>
+    INIT:
+        Create deck of cards
+        Create player
+        Create bank
+    
+    Shuffle the deck of cards
+
+    Player Turn:
+        Draw 1 card from the deck and add it to the player's hand
+        Display the total value of the player's cards
+        Prompt the player to choose hit or stand
+        IF the player chooses hit THEN
+            Draw 1 card from the deck and add it to the player's hand
+            Calculate the total value of the player's cards
+            IF the total value is higher than 21 THEN
+                The bank wins
+                END the game
+            ELSE IF the total value is 21 or lower THEN
+                Go to Player Turn
+        ELSE IF the player chooses stand THEN
+            Bank Turn
+    
+    Bank Turn:
+        Draw 1 card from the deck and add it to the bank's hand
+        Calculate the total value of the bank's cards
+        WHILE the total value is less than 17
+            Draw 1 card from the deck and add it to the bank's hand
+            Go to Bank Turn
+        END WHILE
+        IF the total value is 17 or higher THEN
+            IF the total value is higher than 21 THEN
+                The player wins
+                END the game
+            ELSE IF the total value is 21 THEN
+                The bank wins
+                END the game
+            ELSE IF the total value is lower than the player's total value THEN
+                The player wins
+                END the game
+            ELSE IF the total value is higher than the player's total value THEN
+                The bank wins
+                END the game
+            END IF
+        END IF
+    END
+</code>
+</pre>
+
+<div>
+    <h2>Klasser</h2>
+    <p>
+        Som grund i spelet kommer jag att återanvända de klasser 
+        som jag redan har från tidigare kursmoment:
+        <ul>
+            <li>
+                <b>Card</b>, som skapar ett spelkort,
+            </li>
+            <li>
+                <b>CardGraphic</b>, som ger spelkortet visuell representation,
+            </li>
+            <li>
+                <b>DeckOfCards</b>, som skapar en kortlek, och
+            </li>
+            <li>
+                <b>CardHand</b>, som skapar en hand som kan hålla spelkort.
+            </li>
+        </ul>
+    </p>
+    <p>
+        Ytterligare klasser kommer att behövas för att hantera 
+        funktioner som hör till spelet:
+    </p>
+    <ul>
+        <li>
+            <b>Game</b> - för att hantera spellogik, dvs starta spelet, 
+            hantera turordning, möjlighet att ta kort eller stanna, att 
+            beräkna poäng, att presentera vinnare/förlorare, och 
+            avsluta spelet.
+        </li>
+        <li>
+            <b>Player</b> - för att hålla spelarens resp. bankens hand och poäng.
+        </li>
+    </ul>
+    </p>
+    <p>
+        Utöver ovan nämnda klasser behövs också en ny kontrollerklass
+        för spelet, <b>CardGameController</b>, och för API-delen kommer jag 
+        att återanvända och komplettera min redan existerande 
+        <b>CardApiController</b>.
+    </p>
+</div>
+
+{% block main %}{% endblock %}
+
+{% endblock %}
