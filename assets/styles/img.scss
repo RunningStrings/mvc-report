@@ -30,6 +30,16 @@ img {
     margin-top: 1.4em;
 }
 
+.flowchart-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 1.4em 0;
+    padding: 1.4em;
+    border: 1px solid $accent-color;
+    border-radius: 5px;
+}
+
 .unfiltered-small {
     margin-bottom: 5px;
     max-width: 250px;
