@@ -31,6 +31,11 @@ class Player
         return $this->hand;
     }
 
+    public function setScore(int $score): void
+    {
+        $this->score = $score;
+    }
+
     public function getScore(): int
     {
         return $this->score;
