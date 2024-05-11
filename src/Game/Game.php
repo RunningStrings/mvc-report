@@ -70,7 +70,6 @@ class Game
     public function calculatePoints(Player $player): int
     {
         $total = 0;
-        $aceCount = 0;
         $cards = $player->getHand()->getHand();
         $cardValues = [
             'Ace' => [1, 14],
@@ -82,7 +81,7 @@ class Game
         foreach ($cards as $card) {
             $value = $card->getValue();
             if ($value === 'Ace') {
-                $aceCount++;
+                $total += ($total + 14 <= 21) ? 14 : 1;
             } else {
                 if (isset($cardValues[$value])) {
                     $total += $cardValues[$value];
@@ -91,12 +90,26 @@ class Game
                 }
             }
         }
-
-        for ($i = 0; $i < $aceCount; $i++) {
-            $total += ($total + 14 <= 21) ? 14 : 1;
-        }
-
         return $total;
     }
 
+    public function gameStatus(Player $player, Player $bank): string
+    {
+        $playerScore = $this->calculatePoints($player);
+        $bankScore = $this->calculatePoints($bank);
+
+        if ($playerScore > 21) {
+            return 'Player Bust';
+        } elseif ($bankScore === $$playerScore) {
+            return 'Bank Wins (Tie)';
+        } elseif ($bankScore > $playerScore && $bankScore <= 21) {
+            return 'Bank Wins';
+        } elseif ($bankScore > 21) {
+            return 'Bank Bust';
+        } elseif ($playerScore > $bankScore && $playerScore <= 21) {
+            return 'Player Wins';
+        }
+
+        return 'Game On';
+    }
 }
