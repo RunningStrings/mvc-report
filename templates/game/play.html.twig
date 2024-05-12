@@ -5,9 +5,65 @@
 {% block body %}
 <h1>{{ title }}</h1>
 
-<div>
-<p>Egad, the game.</p>
+{{ include('flash.html.twig') }}
+
+<div class="col-wrapper">
+    <div class="col-left">
+        <div class="dealt-cards">
+            <div class="player-cards">
+                <h2>Spelare: {{ players.player.getName() }}</h2>
+                <div>Poäng: {{ players.player.getScore() }}</div>
+                <div class="card-row-wrapper">
+                    <div class="card-row">
+                        {% for card in players.player.getHand().getHand() %}
+                            <div class="single-card">
+                                {{ card|raw }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if app.session.get('gameOver') %}
+        <div class="row-buttons game-buttons">
+            <div class="box">
+                <a href="{{ path('game_play') }}" class="repo-link">Spela igen?</a>
+            </div>
+            <div class="box">
+                <a href="{{ path('game_init') }}" class="repo-link">Ny kortlek?</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="row-buttons game-buttons">
+            <div class="box">
+                <a href="{{ path('game_hit') }}" class="repo-link">Ta ett kort</a>
+            </div>
+            <div class="box">
+                <a href="{{ path('game_stand') }}" class="repo-link">Stanna</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-left">
+        <div class="dealt-cards">
+            <div class="player-cards">
+                <h2>{{ players.bank.getName() }}</h2>
+                <div>Poäng: {{ players.bank.getScore() }}</div>
+                <div class="card-row-wrapper">
+                    <div class="card-row">
+                        {% for card in players.bank.getHand().getHand() %}
+                            <div class="single-card">
+                                {{ card|raw }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 
 {% block main %}{% endblock %}
