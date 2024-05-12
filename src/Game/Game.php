@@ -100,7 +100,7 @@ class Game
 
         if ($playerScore > 21) {
             return 'Player Bust';
-        } elseif ($bankScore === $$playerScore) {
+        } elseif ($bankScore === $playerScore) {
             return 'Bank Wins (Tie)';
         } elseif ($bankScore > $playerScore && $bankScore <= 21) {
             return 'Bank Wins';
