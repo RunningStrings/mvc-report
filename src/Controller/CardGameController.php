@@ -64,6 +64,8 @@ class CardGameController extends AbstractController
         $game = new Game($deck, $player, $bank);
         $session->set("game", $game);
 
+        $session->set("gameOver", false);
+
         return $this->redirectToRoute('game_play');
     }
 
@@ -72,11 +74,11 @@ class CardGameController extends AbstractController
     {
         $game = $session->get('game');
 
-        $player = $game->getPlayer();
+        $players = $game->getPlayers();
 
         $data = [
             "title" => "Tjugoett",
-            "player" => $player,
+            "players" => $players,
             "metadata" => $this->loadMetaData()
         ];
 
@@ -91,7 +93,19 @@ class CardGameController extends AbstractController
 
         $game->playerTurn();
 
+        $players = $game->getPlayers();
+        $player = $players['player'];
+        $score = $game->calculatePoints($player);
+        $player->setScore($score);
+
         $session->set("game", $game);
+
+        $gameStatus = $game->gameStatus($player, $players['bank']);
+
+        if ($gameStatus === 'Player Bust') {
+            $session->set("gameOver", true);
+            $this->addFlash('lose', 'Du förlorade spelomgången!');
+        }
 
         return $this->redirectToRoute('game_play');
     }
@@ -104,7 +118,36 @@ class CardGameController extends AbstractController
 
         $game->bankTurn();
 
+        $players = $game->getPlayers();
+        $player = $players['player'];
+        $bank = $players['bank'];
+        $score = $game->calculatePoints($bank);
+        $bank->setScore($score);
+
         $session->set("game", $game);
+
+        $gameStatus = $game->gameStatus($player, $bank);
+
+        switch ($gameStatus) {
+            case 'Bank Wins (Tie)':
+                $session->set("gameOver", true);
+                $this->addFlash('lose', 'Du förlorade spelomgången!');
+                break;
+            case 'Bank Wins':
+                $session->set("gameOver", true);
+                $this->addFlash('lose', 'Du förlorade spelomgången!');
+                break;
+            case 'Bank Bust':
+                $session->set("gameOver", true);
+                $this->addFlash('win', 'Du vann spelomgången!');
+                break;
+            case 'Player Win':
+                $session->set("gameOver", true);
+                $this->addFlash('win', 'Du vann spelomgången!');
+                break;
+            default:
+                return $this->redirectToRoute('game_play');
+        }
 
         return $this->redirectToRoute('game_play');
     }
