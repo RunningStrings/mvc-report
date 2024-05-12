@@ -17,3 +17,23 @@
 .flash-warning:before {
     content: "⚠";
 }
+
+.flash-win {
+    padding: 0.5em;
+    color: #007a5d;
+    background-color: #ccffcc;
+    border-color: #a2d8a2;
+}
+.flash-win::before {
+    content: "👏";
+}
+
+.flash-lose {
+    padding: 0.5em;
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+.flash-lose:before {
+    content: "😭";
+}
