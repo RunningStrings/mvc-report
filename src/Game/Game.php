@@ -21,6 +21,11 @@ class Game
         $this->bank = $bank;
     }
 
+    public function getDeck(): DeckOfCards
+    {
+        return $this->deck;
+    }
+
     public function setPlayers(?Player $player = null, ?Player $bank = null): void
     {
         if ($player !== null) {
