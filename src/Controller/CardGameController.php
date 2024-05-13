@@ -136,20 +136,22 @@ class CardGameController extends AbstractController
         SessionInterface $session
     ): Response {
         $game = $session->get("game");
-
-        $amount = $session->get("amount");
-
-        $game->playerTurn();
-
         $players = $game->getPlayers();
         $player = $players['player'];
         $bank = $players['bank'];
+
+        $amount = $session->get("amount");
+
+        $gameStatus = $game->gameStatus($player, $bank);
+
+        $game->playerTurn();
+
         $score = $game->calculatePoints($player);
         $player->setScore($score);
 
         $session->set("game", $game);
 
-        $gameStatus = $game->gameStatus($player, $players['bank']);
+        $gameStatus = $game->gameStatus($player, $bank);
 
         if ($gameStatus === 'Player Bust') {
             $scoreBoard = $session->get("scoreBoard");
@@ -174,13 +176,12 @@ class CardGameController extends AbstractController
 
         $amount = $session->get("amount");
 
+        $gameStatus = $game->gameStatus($player, $bank);
+
         $game->bankTurn();
 
-        $players = $game->getPlayers();
-        $player = $players['player'];
-        $bank = $players['bank'];
-        $score = $game->calculatePoints($bank);
-        $bank->setScore($score);
+        $bankScore = $game->calculatePoints($bank);
+        $bank->setScore($bankScore);
 
         $session->set("game", $game);
 
@@ -199,10 +200,9 @@ class CardGameController extends AbstractController
             case 'Bank Bust':
             case 'Player Wins':
                 $scoreBoard = $session->get("scoreBoard");
-                $scoreBoard[$gameStatus === 'Bank Bust' ? 'player' : 'bank']++;
+                $scoreBoard['player']++;
                 $session->set("scoreBoard", $scoreBoard);
-                $winner = $gameStatus === 'Bank Bust' ? $player : $bank;
-                $winner->win($amount * 2);
+                $player->win($amount * 2);
                 $bank->setMoney($bank->getMoney() - $amount);
                 $session->set("gameOver", true);
                 $this->addFlash('win', 'Du vann spelomgången!');
