@@ -27,21 +27,28 @@
         {% if app.session.get('gameOver') %}
         <div class="row-buttons game-buttons">
             <div class="box">
-                <a href="{{ path('game_play') }}" class="repo-link">Spela igen?</a>
-            </div>
-            <div class="box">
-                <a href="{{ path('game_init') }}" class="repo-link">Ny kortlek?</a>
+                <a href="{{ path('game_init') }}" class="repo-link">Spela igen?</a>
             </div>
         </div>
         {% else %}
-        <div class="row-buttons game-buttons">
-            <div class="box">
-                <a href="{{ path('game_hit') }}" class="repo-link">Ta ett kort</a>
-            </div>
-            <div class="box">
-                <a href="{{ path('game_stand') }}" class="repo-link">Stanna</a>
-            </div>
-        </div>
+            {% if app.session.get('betPlaced') %}
+                <div class="row-buttons game-buttons">
+                    <div class="box">
+                        <a href="{{ path('game_hit') }}" class="repo-link">Ta ett kort</a>
+                    </div>
+                    <div class="box">
+                        <a href="{{ path('game_stand') }}" class="repo-link">Stanna</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row-buttons game-buttons">
+                    <form action="{{ path('game_bet') }}" method="post">
+                        <label for="amount">Insats:</label>
+                        <input type="number" id="amount" name="amount" min="0">
+                        <button type="submit" class="button">Lägg insats</button>
+                    </form>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
     <div class="col-left">
