@@ -3,14 +3,41 @@ input {
     font-size: 1em;
 }
 
-// h1 {
-//     border-bottom: 4px double green;
-// }
-
 .die {
     font-size: 2em;
 }
 
 .game-buttons {
     margin-top: 1em;
+}
+
+.button {
+    background-color: $content-color;
+    border: 1px solid $accent-color;
+    border-radius: 5px;
+    font-family: $header-font;
+    font-size: 1.2em;
+    transition: color 0.1s;
+    padding: 0.5em;
+    width: 45%;
+
+    &:hover {
+        color: $accent-color;
+        outline: 2px solid $accent-color;
+    }
+}
+
+#amount {
+    background-color: $content-color;
+    border: 1px solid $accent-color;
+    border-radius: 5px;
+    color: $link-color;
+    padding: 0.5em 0;
+    width: 45%;
+}
+
+label[for="amount"] {
+    position: absolute;
+    left: -9999px;
+    visibility: hidden;
 }
