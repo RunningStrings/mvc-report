@@ -3,6 +3,7 @@
 namespace App\Game;
 
 use App\Card\CardHand;
+use App\Card\DeckOfCards;
 
 class Player
 {
@@ -11,16 +12,12 @@ class Player
     protected int $score;
     protected int $money;
 
-    public function __construct(string $name)
+    public function __construct(string $name, DeckOfCards $deck)
     {
         $this->name = $name;
         $this->score = 0;
         $this->money = 100;
-    }
-
-    public function addHand(CardHand $hand): void
-    {
-        $this->hand = $hand;
+        $this->hand = new CardHand($deck);
     }
 
     public function getName(): string
