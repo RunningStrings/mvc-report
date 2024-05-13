@@ -13,6 +13,7 @@
             <div class="player-cards">
                 <h2>Spelare: {{ players.player.getName() }}</h2>
                 <div>Poäng: {{ players.player.getScore() }}</div>
+                <div>Pengar: {{ players.player.getMoney() }}</div>
                 <div class="card-row-wrapper">
                     <div class="card-row">
                         {% for card in players.player.getHand().getHand() %}
@@ -56,6 +57,7 @@
             <div class="player-cards">
                 <h2>{{ players.bank.getName() }}</h2>
                 <div>Poäng: {{ players.bank.getScore() }}</div>
+                <div>Pengar: {{ players.bank.getMoney() }}</div>
                 <div class="card-row-wrapper">
                     <div class="card-row">
                         {% for card in players.bank.getHand().getHand() %}
