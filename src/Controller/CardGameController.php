@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Card\CardHand;
 use App\Card\DeckOfCards;
 use App\Game\Game;
 use App\Game\Player;
@@ -53,13 +52,9 @@ class CardGameController extends AbstractController
             $deck = new DeckOfCards();
             $deck->shuffleDeck();
 
-            $player = new Player('Player');
-            $playerHand = new CardHand($deck);
-            $player->addHand($playerHand);
+            $player = new Player('Player', $deck);
 
-            $bank = new Player('Bank');
-            $bankHand = new CardHand($deck);
-            $bank->addHand($bankHand);
+            $bank = new Player('Bank', $deck);
 
             $game = new Game($deck, $player, $bank);
             $session->set("game", $game);
@@ -74,7 +69,7 @@ class CardGameController extends AbstractController
             $bank->setScore(0);
         }
 
-        $session->set("gameOver", false);
+        $session->set("roundOver", false);
         $session->set("betPlaced", false);
 
         $amount = 0;
@@ -158,7 +153,7 @@ class CardGameController extends AbstractController
             $scoreBoard['bank']++;
             $session->set("scoreBoard", $scoreBoard);
             $bank->win($amount);
-            $session->set("gameOver", true);
+            $session->set("roundOver", true);
             $this->addFlash('lose', 'Du förlorade spelomgången!');
         }
 
@@ -194,7 +189,7 @@ class CardGameController extends AbstractController
                 $scoreBoard['bank']++;
                 $session->set("scoreBoard", $scoreBoard);
                 $bank->win($amount);
-                $session->set("gameOver", true);
+                $session->set("roundOver", true);
                 $this->addFlash('lose', 'Du förlorade spelomgången!');
                 break;
             case 'Bank Bust':
@@ -204,7 +199,7 @@ class CardGameController extends AbstractController
                 $session->set("scoreBoard", $scoreBoard);
                 $player->win($amount * 2);
                 $bank->setMoney($bank->getMoney() - $amount);
-                $session->set("gameOver", true);
+                $session->set("roundOver", true);
                 $this->addFlash('win', 'Du vann spelomgången!');
                 break;
             default:
