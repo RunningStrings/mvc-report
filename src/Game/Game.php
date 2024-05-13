@@ -50,13 +50,14 @@ class Game
 
     public function playerTurn(): void
     {
-        $this->player->getHand()->addCard($this->deck->draw());
-        // $this->calculatePoints($this->player);
+        if (!$this->deck->isEmpty()) {
+            $this->player->getHand()->addCard($this->deck->draw());
+        }
     }
 
     public function bankTurn(): void
     {
-        while ($this->calculatePoints($this->bank) < 17) {
+        while ($this->calculatePoints($this->bank) < 17 && !$this->deck->isEmpty()) {
             $this->bank->getHand()->addCard($this->deck->draw());
         }
     }
@@ -75,6 +76,7 @@ class Game
     public function calculatePoints(Player $player): int
     {
         $total = 0;
+        $aceCount = 0;
         $cards = $player->getHand()->getHand();
         $cardValues = [
             'Ace' => [1, 14],
@@ -86,7 +88,7 @@ class Game
         foreach ($cards as $card) {
             $value = $card->getValue();
             if ($value === 'Ace') {
-                $total += ($total + 14 <= 21) ? 14 : 1;
+                $aceCount++;
             } else {
                 if (isset($cardValues[$value])) {
                     $total += $cardValues[$value];
@@ -95,6 +97,15 @@ class Game
                 }
             }
         }
+
+        for ($i = 0; $i < $aceCount; $i++) {
+            if ($total + 14 > 21) {
+                $total += 1;
+            } else {
+                $total += 14;
+            }
+        }
+
         return $total;
     }
 
@@ -102,6 +113,16 @@ class Game
     {
         $playerScore = $this->calculatePoints($player);
         $bankScore = $this->calculatePoints($bank);
+
+        if ($this->deck->isEmpty()) {
+            if ($playerScore <= 21 && ($bankScore > 21 || $playerScore > $bankScore)) {
+                return 'Player Wins';
+            } elseif ($bankScore <= 21 && ($playerScore > 21 || $bankScore > $playerScore)) {
+                return 'Bank Wins';
+            } else {
+                return 'Bank Wins (Tie)';
+            }
+        }
 
         if ($playerScore > 21) {
             return 'Player Bust';
