@@ -8,6 +8,7 @@ use App\Game\Game;
 use App\Game\Player;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,22 +52,33 @@ class CardGameController extends AbstractController
         if (!$game || !$game->getDeck() || count($game->getDeck()->getDeck()) === 0) {
             $deck = new DeckOfCards();
             $deck->shuffleDeck();
-            return $deck;
-        } 
-        $deck = $game->getDeck();
 
-        $player = new Player('Player');
-        $playerHand = new CardHand($deck);
-        $player->addHand($playerHand);
+            $player = new Player('Player');
+            $playerHand = new CardHand($deck);
+            $player->addHand($playerHand);
 
-        $bank = new Player('Bank');
-        $bankHand = new CardHand($deck);
-        $bank->addHand($bankHand);
+            $bank = new Player('Bank');
+            $bankHand = new CardHand($deck);
+            $bank->addHand($bankHand);
 
-        $game = new Game($deck, $player, $bank);
-        $session->set("game", $game);
+            $game = new Game($deck, $player, $bank);
+            $session->set("game", $game);
+        } else {
+            $deck = $game->getDeck();
+            $player = $game->getPlayers()['player'];
+            $bank = $game->getPlayers()['bank'];
+
+            $player->getHand()->clearHand();
+            $bank->getHand()->clearHand();
+            $player->setScore(0);
+            $bank->setScore(0);
+        }
 
         $session->set("gameOver", false);
+        $session->set("betPlaced", false);
+
+        $amount = 0;
+        $session->set("amount", $amount);
 
         $scoreBoard = $session->get("scoreBoard");
         if (!$scoreBoard) {
@@ -80,6 +92,28 @@ class CardGameController extends AbstractController
 
         return $this->redirectToRoute('game_play');
     }
+
+    #[Route("/game/bet", name: "game_bet", methods: ['POST'])]
+    public function bet(
+        Request $request,
+        SessionInterface $session
+        ): Response {
+            $game = $session->get("game");
+            $players = $game->getPlayers();
+            $player = $players['player'];
+
+            $amount = $request->request->getInt('amount');
+
+            if (!$player->bet($amount)) {
+                $this->addFlash('warning', 'Täckning saknas för beloppet.');
+            } else {
+                $session->set("amount", $amount);
+                $session->set("betPlaced", true);
+                $session->set("game", $game);
+            }
+
+            return $this->redirectToRoute('game_play');
+        }
 
     #[Route("/game/play", name: "game_play", methods: ['GET'])]
     public function play(SessionInterface $session): Response
@@ -103,10 +137,13 @@ class CardGameController extends AbstractController
     ): Response {
         $game = $session->get("game");
 
+        $amount = $session->get("amount");
+
         $game->playerTurn();
 
         $players = $game->getPlayers();
         $player = $players['player'];
+        $bank = $players['bank'];
         $score = $game->calculatePoints($player);
         $player->setScore($score);
 
@@ -118,6 +155,7 @@ class CardGameController extends AbstractController
             $scoreBoard = $session->get("scoreBoard");
             $scoreBoard['bank']++;
             $session->set("scoreBoard", $scoreBoard);
+            $bank->win($amount);
             $session->set("gameOver", true);
             $this->addFlash('lose', 'Du förlorade spelomgången!');
         }
@@ -130,6 +168,11 @@ class CardGameController extends AbstractController
         SessionInterface $session
     ): Response {
         $game = $session->get("game");
+        $players = $game->getPlayers();
+        $player = $players['player'];
+        $bank = $players['bank'];
+
+        $amount = $session->get("amount");
 
         $game->bankTurn();
 
@@ -145,36 +188,30 @@ class CardGameController extends AbstractController
 
         switch ($gameStatus) {
             case 'Bank Wins (Tie)':
-                $scoreBoard = $session->get("scoreBoard");
-                $scoreBoard['bank']++;
-                $session->set("scoreBoard", $scoreBoard);
-                $session->set("gameOver", true);
-                $this->addFlash('lose', 'Du förlorade spelomgången!');
-                break;
             case 'Bank Wins':
                 $scoreBoard = $session->get("scoreBoard");
                 $scoreBoard['bank']++;
                 $session->set("scoreBoard", $scoreBoard);
+                $bank->win($amount);
                 $session->set("gameOver", true);
                 $this->addFlash('lose', 'Du förlorade spelomgången!');
                 break;
             case 'Bank Bust':
-                $scoreBoard = $session->get("scoreBoard");
-                $scoreBoard['player']++;
-                $session->set("scoreBoard", $scoreBoard);
-                $session->set("gameOver", true);
-                $this->addFlash('win', 'Du vann spelomgången!');
-                break;
             case 'Player Wins':
                 $scoreBoard = $session->get("scoreBoard");
-                $scoreBoard['player']++;
+                $scoreBoard[$gameStatus === 'Bank Bust' ? 'player' : 'bank']++;
                 $session->set("scoreBoard", $scoreBoard);
+                $winner = $gameStatus === 'Bank Bust' ? $player : $bank;
+                $winner->win($amount * 2);
+                $bank->setMoney($bank->getMoney() - $amount);
                 $session->set("gameOver", true);
                 $this->addFlash('win', 'Du vann spelomgången!');
                 break;
             default:
                 return $this->redirectToRoute('game_play');
         }
+
+        $session->set("game", $game);
 
         return $this->redirectToRoute('game_play');
     }
