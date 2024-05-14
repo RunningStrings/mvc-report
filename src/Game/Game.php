@@ -32,6 +32,20 @@ class Game
         $this->scoreBoard = ['player' => 0, 'bank' => 0];
     }
 
+    public function resetGame(): void
+    {
+        $player = $this->getPlayers()['player'];
+        $bank = $this->getPlayers()['bank'];
+
+        $player->getHand()->clearHand();
+        $bank->getHand()->clearHand();
+        $player->setScore(0);
+        $bank->setScore(0);
+        $this->setRoundOver(false);
+        $this->setBetPlaced(false);
+        $this->setAmount(0);
+    }
+
     public function getDeck(): DeckOfCards
     {
         return $this->deck;
