@@ -77,11 +77,13 @@ class CardGameController extends AbstractController
         $game = $session->get('game');
 
         $players = $game->getPlayers();
+        $amount = $game->getAmount();
 
         $data = [
             "game" => $game,
             "title" => "Tjugoett",
             "players" => $players,
+            "amount" => $amount,
             "metadata" => $this->loadMetaData()
         ];
 
