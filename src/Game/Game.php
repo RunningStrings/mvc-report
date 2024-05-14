@@ -32,6 +32,17 @@ class Game
         $this->scoreBoard = ['player' => 0, 'bank' => 0];
     }
 
+    public static function newGame(): Game
+    {
+        $deck = new DeckOfCards();
+        $deck->shuffleDeck();
+
+        $player = new Player('Player', $deck);
+        $bank = new Player('Bank', $deck);
+
+        return new Game($deck, $player, $bank);
+    }
+
     public function resetGame(): void
     {
         $player = $this->getPlayers()['player'];
