@@ -5,15 +5,24 @@
 {% block body %}
 <h1>{{ title }}</h1>
 
-{{ include('flash.html.twig') }}
+
+{# {{ include('flash.html.twig') }} #}
 
 <div class="col-wrapper">
     <div class="col-left">
         <div class="dealt-cards">
             <div class="player-cards">
-                <h2>Spelare: {{ players.player.getName() }}</h2>
-                <div>Poäng: {{ players.player.getScore() }}</div>
-                <div>Pengar: {{ players.player.getMoney() }}</div>
+                <h3>{{ players.player.getName() }}</h3>
+                <div class="col-wrapper">
+                    <div class="small-player-info">
+                        <div>Poäng: {{ players.player.getScore() }}</div>
+                        <div>Pengar: {{ players.player.getMoney() }}</div>
+                    </div>
+                    <div class="small-flash-box">
+                        {{ include('flash.html.twig') }}
+                    </div>
+                </div>
+
                 <div class="card-row-wrapper">
                     {% for row in players.player.getHand().getHand()|batch(6) %}
                         <div class="card-row">
@@ -47,9 +56,16 @@
     <div class="col-left">
         <div class="dealt-cards">
             <div class="player-cards">
-                <h2>{{ players.bank.getName() }}</h2>
-                <div>Poäng: {{ players.bank.getScore() }}</div>
-                <div>Pengar: {{ players.bank.getMoney() }}</div>
+                <h3>{{ players.bank.getName() }}</h3>
+                <div class="col-wrapper">
+                    <div class="col-left">
+                        <div>Poäng: {{ players.bank.getScore() }}</div>
+                        <div>Pengar: {{ players.bank.getMoney() }}</div>
+                    </div>
+                    <div class="col-left">
+                        <div>I potten: {{ amount * 2 }}</div>
+                    </div>
+                </div>
                 <div class="card-row-wrapper">
                     {% for row in players.bank.getHand().getHand()|batch(6) %}
                         <div class="card-row">
