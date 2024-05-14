@@ -109,18 +109,22 @@ class Game
         return $total;
     }
 
-    public function gameStatus(Player $player, Player $bank): string
+    public function gameStatus(Player $player, Player $bank, int $playerMoney, int $bankMoney): string
     {
         $playerScore = $this->calculatePoints($player);
         $bankScore = $this->calculatePoints($bank);
 
+        if ($playerMoney === 0 || $bankMoney === 0) {
+            return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
+        }
+
         if ($this->deck->isEmpty()) {
             if ($playerScore <= 21 && ($bankScore > 21 || $playerScore > $bankScore)) {
-                return 'Player Wins';
+                return 'Player Wins (Empty Deck)';
             } elseif ($bankScore <= 21 && ($playerScore > 21 || $bankScore > $playerScore)) {
-                return 'Bank Wins';
+                return 'Bank Wins (Empty Deck)';
             } else {
-                return 'Bank Wins (Tie)';
+                return 'Bank Wins (Tie) (Empty Deck)';
             }
         }
 
