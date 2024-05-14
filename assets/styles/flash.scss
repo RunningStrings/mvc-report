@@ -3,6 +3,7 @@
     color: #004085;
     background-color: #cce5ff;
     border-color: #b8daff;
+    border-radius: 5px;
 }
 .flash-notice:before {
     content: "ⓘ";
@@ -13,6 +14,7 @@
     color: #856404;
     background-color: #fff3cd;
     border-color: #ffeeba;
+    border-radius: 5px;
 }
 .flash-warning:before {
     content: "⚠";
@@ -23,6 +25,7 @@
     color: #007a5d;
     background-color: #ccffcc;
     border-color: #a2d8a2;
+    border-radius: 5px;
 }
 .flash-win::before {
     content: "👏";
@@ -33,7 +36,15 @@
     color: #004085;
     background-color: #cce5ff;
     border-color: #b8daff;
+    border-radius: 5px;
 }
 .flash-lose:before {
     content: "😭";
+}
+
+.small-flash-box {
+    display: flex;
+    flex-direction: row;
+    margin: 0 1em;
+    width: 70%;
 }
