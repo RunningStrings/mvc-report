@@ -59,17 +59,7 @@ class CardGameController extends AbstractController
             $game = new Game($deck, $player, $bank);
             $session->set("game", $game);
         } else {
-            $deck = $game->getDeck();
-            $player = $game->getPlayers()['player'];
-            $bank = $game->getPlayers()['bank'];
-
-            $player->getHand()->clearHand();
-            $bank->getHand()->clearHand();
-            $player->setScore(0);
-            $bank->setScore(0);
-            $game->setRoundOver(false);
-            $game->setBetPlaced(false);
-            $game->setAmount(0);
+            $game->resetGame();
         }
 
         return $this->redirectToRoute('game_play');
@@ -137,7 +127,7 @@ class CardGameController extends AbstractController
         return $this->redirectToRoute('game_play');
     }
 
-        /**
+    /**
      * @return array<string>
      */
     private function loadMetaData(): array
