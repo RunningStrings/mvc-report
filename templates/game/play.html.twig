@@ -15,47 +15,31 @@
                 <div>Poäng: {{ players.player.getScore() }}</div>
                 <div>Pengar: {{ players.player.getMoney() }}</div>
                 <div class="card-row-wrapper">
-                    <div class="card-row">
-                        {% for card in players.player.getHand().getHand() %}
-                            <div class="single-card">
-                                {{ card|raw }}
-                            </div>
-                        {% endfor %}
-                    </div>
+                    {% for row in players.player.getHand().getHand()|batch(6) %}
+                        <div class="card-row">
+                            {% for card in row %}
+                                <div class="single-card">
+                                    {{ card|raw }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        {% if app.session.get('gameOver') %}
-        <div class="row-buttons game-buttons">
-            <div class="box">
-                <a href="{{ path('game_init') }}" class="repo-link">Nytt spel?</a>
-            </div>
-        </div>
-        {% else %}
-            {% if app.session.get('roundOver') %}
-            <div class="row-buttons game-buttons">
-                <div class="box">
-                    <a href="{{ path('game_init') }}" class="repo-link">Spela igen?</a>
-                </div>
-            </div>
+        {% set game = app.session.get('game') %}
+        {% if game is not null %}
+            {% if game.isGameOver() %}
+                {{ include('game/buttons/button_new_game.html.twig') }}
             {% else %}
-                {% if app.session.get('betPlaced') %}
-                    <div class="row-buttons game-buttons">
-                        <div class="box">
-                            <a href="{{ path('game_hit') }}" class="repo-link">Ta ett kort</a>
-                        </div>
-                        <div class="box">
-                            <a href="{{ path('game_stand') }}" class="repo-link">Stanna</a>
-                        </div>
-                    </div>
+                {% if game.isRoundOver() %}
+                    {{ include('game/buttons/button_play_again.html.twig') }}
                 {% else %}
-                    <div class="row-buttons game-buttons">
-                        <form action="{{ path('game_bet') }}" method="post">
-                            <label for="amount">Insats:</label>
-                            <input type="number" id="amount" name="amount" min="0" required>
-                            <button type="submit" class="button">Lägg insats</button>
-                        </form>
-                    </div>
+                    {% if game.isBetPlaced() %}
+                        {{ include('game/buttons/button_hit_stand.html.twig') }}
+                    {% else %}
+                        {{ include('game/buttons/button_place_bet.html.twig') }}
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endif %}
@@ -67,13 +51,15 @@
                 <div>Poäng: {{ players.bank.getScore() }}</div>
                 <div>Pengar: {{ players.bank.getMoney() }}</div>
                 <div class="card-row-wrapper">
-                    <div class="card-row">
-                        {% for card in players.bank.getHand().getHand() %}
-                            <div class="single-card">
-                                {{ card|raw }}
-                            </div>
-                        {% endfor %}
-                    </div>
+                    {% for row in players.bank.getHand().getHand()|batch(6) %}
+                        <div class="card-row">
+                            {% for card in row %}
+                                <div class="single-card">
+                                    {{ card|raw }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
