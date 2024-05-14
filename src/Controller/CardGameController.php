@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Card\DeckOfCards;
 use App\Game\Game;
-use App\Game\Player;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,14 +47,15 @@ class CardGameController extends AbstractController
     {
         $game = $session->get("game");
         if (!$game || !$game->getDeck() || count($game->getDeck()->getDeck()) === 0 || $game->isGameOver()) {
-            $deck = new DeckOfCards();
-            $deck->shuffleDeck();
+            $game = Game::newGame();
+            // $deck = new DeckOfCards();
+            // $deck->shuffleDeck();
 
-            $player = new Player('Player', $deck);
+            // $player = new Player('Player', $deck);
 
-            $bank = new Player('Bank', $deck);
+            // $bank = new Player('Bank', $deck);
 
-            $game = new Game($deck, $player, $bank);
+            // $game = new Game($deck, $player, $bank);
             $session->set("game", $game);
         } else {
             $game->resetGame();
