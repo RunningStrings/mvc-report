@@ -150,16 +150,6 @@ class Game
         } else {
             return null;
         }
-        // if ($player->bet($amount) && $bank->bet($amount)) {
-        //     $this->setAmount($amount);
-        //     $this->setBetPlaced(true);
-        // } else {
-        //     if ($this->isBetPlaced()) {
-        //         $player->setMoney($player->getMoney() + $amount);
-        //         $bank->setMoney($bank->getMoney() + $amount);
-        //         $this->setBetPlaced(false);
-        //     }
-        // }
     }
 
     public function playerTurn(): ?array
@@ -177,55 +167,6 @@ class Game
         $gameStatus = $this->gameStatus($player, $bank, $player->getMoney(), $bank->getMoney());
 
         return $this->handleGameStatus($gameStatus, $player, $bank);
-
-        // switch ($gameStatus) {
-        //     case 'Player Bust':
-        //         // player bust
-        //         $scoreBoard = $this->getScoreBoard();
-        //         $scoreBoard['bank']++;
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setRoundOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'];
-        //     case 'Player Bankrupt':
-        //         // player bankrupt
-        //         // $bank->win($this->getAmount());
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setGameOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Dina pengar är slut - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Bankrupt':
-        //         // bank bankrupt
-        //         $player->win($this->getAmount() * 2);
-        //         $this->setGameOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Banken är tömd - du vann spelet!', 'type' => 'win'];
-        //     case 'Player Wins (Empty Deck)':
-        //         // player win empty deck
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $player->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - du vann spelet!', 'type' => 'win'];
-        //     case 'Bank Wins (Empty Deck)':
-        //         // bank win empty deck
-        //         $player->win($this->getAmount());
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Wins (Tie) (Empty Deck)':
-        //         // bank win tie empty deck
-        //         $bank->win($this->getAmount());
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - tie - du förlorade spelet!', 'type' => 'lose'];
-        //     default:
-        //         return null;
-        // }
     }
 
     public function bankTurn(): ?array
@@ -244,56 +185,7 @@ class Game
 
         $gameStatus = $this->gameStatus($player, $bank, $player->getMoney(), $bank->getMoney());
 
-        
-        
         return $this->handleGameStatus($gameStatus, $player, $bank);
-
-        // switch ($gameStatus) {
-        //     case 'Bank Wins (Tie)':
-        //     case 'Bank Wins':
-        //         $scoreBoard = $this->getScoreBoard();
-        //         $scoreBoard['bank']++;
-        //         $bank->win($this->getAmount() * 2);
-        //         // $this->setRoundOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'];
-        //     case 'Bank Bust':
-        //     case 'Player Wins':
-        //         $scoreBoard = $this->getScoreBoard();
-        //         $scoreBoard['player']++;
-        //         $player->win($this->getAmount() * 2);
-        //         // $this->setRoundOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Du vann spelomgången!', 'type' => 'win'];
-        //     case 'Player Bankrupt':
-        //         $this->setGameOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Dina pengar är slut - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Bankrupt':
-        //         $this->setGameOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Banken är tömd - du vann spelet!', 'type' => 'win'];
-        //     case 'Player Wins (Empty Deck)':
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $player->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - du vann spelet!', 'type' => 'win'];
-        //     case 'Bank Wins (Empty Deck)':
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Wins (Tie) (Empty Deck)':
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - tie - du förlorade spelet!', 'type' => 'lose'];
-        //     default:
-        //         return null;
-        // }
     }
 
     private function handleGameStatus(string $gameStatus, Player $player, Player $bank): ?array
@@ -342,7 +234,6 @@ class Game
                     $bank->win($this->getAmount() * 2);
                     $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['bank']++;
-                    // $this->setRoundOver(true);
                     $this->setAmount(0);
                     break;
                 case 'Bank Bust':
@@ -351,7 +242,6 @@ class Game
                     $player->win($this->getAmount() * 2);
                     $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['player']++;
-                    // $this->setRoundOver(true);
                     $this->setAmount(0);
                     break;
                 default:
@@ -361,72 +251,6 @@ class Game
             return $endMessage;
         }
         return null;
-        // switch ($gameStatus) {
-        //     case 'Player Bust':
-        //         // player bust
-        //         $scoreBoard = $this->getScoreBoard();
-        //         $scoreBoard['bank']++;
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setRoundOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'];
-        //     case 'Player Bankrupt':
-        //         // player bankrupt
-        //         // $bank->win($this->getAmount());
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setGameOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Dina pengar är slut - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Bankrupt':
-        //         // bank bankrupt
-        //         $player->win($this->getAmount() * 2);
-        //         $this->setGameOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Banken är tömd - du vann spelet!', 'type' => 'win'];
-        //     case 'Player Wins (Empty Deck)':
-        //         // player win empty deck
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $player->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - du vann spelet!', 'type' => 'win'];
-        //     case 'Bank Wins (Empty Deck)':
-        //         // bank win empty deck
-        //         $player->win($this->getAmount());
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Wins (Tie) (Empty Deck)':
-        //         // bank win tie empty deck
-        //         $bank->win($this->getAmount());
-        //         $this->setRoundOver(true);
-        //         $this->setGameOver(true);
-        //         $bank->win($this->getAmount() * 2);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Kortleken är slut - tie - du förlorade spelet!', 'type' => 'lose'];
-        //     case 'Bank Wins (Tie)':
-        //     case 'Bank Wins':
-        //         // bank win
-        //         $scoreBoard = $this->getScoreBoard();
-        //         $scoreBoard['bank']++;
-        //         $bank->win($this->getAmount() * 2);
-        //         // $this->setRoundOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'];
-        //     case 'Bank Bust':
-        //     case 'Player Wins':
-        //         // player win
-        //         $scoreBoard = $this->getScoreBoard();
-        //         $scoreBoard['player']++;
-        //         $player->win($this->getAmount() * 2);
-        //         // $this->setRoundOver(true);
-        //         $this->setAmount(0);
-        //         return ['message' => 'Du vann spelomgången!', 'type' => 'win'];
-        //     default:
-        //         return null;
-        // }
     }
 
     private function getEndMessage(string $gameStatus): ?array
