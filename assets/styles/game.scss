@@ -33,6 +33,7 @@ input {
     border-radius: 5px;
     color: $link-color;
     padding: 0.5em 0;
+    text-align: right;
     width: 45%;
 }
 
@@ -46,5 +47,10 @@ label[for="amount"] {
     display: flex;
     flex-direction: column;
     margin-right: 1em;
+    padding: 0.5em;
     width: 30%;
+}
+
+.dealt-cards .single-card {
+    margin-top: 0.5em;
 }
