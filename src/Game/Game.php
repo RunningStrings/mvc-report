@@ -192,37 +192,41 @@ class Game
     {
         $endMessage = $this->getEndMessage($gameStatus);
         if ($endMessage !== null) {
+            $scoreBoard = $this->getScoreBoard();
             switch ($gameStatus) {
                 case 'Player Bust':
-                    $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['bank']++;
                     $bank->win($this->getAmount() * 2);
                     $this->setRoundOver(true);
                     $this->setAmount(0);
                     break;
                 case 'Player Bankrupt':
+                    $scoreBoard['bank']++;
                     $bank->win($this->getAmount() * 2);
                     $this->setGameOver(true);
                     $this->setAmount(0);
                     break;
                 case 'Bank Bankrupt':
+                    $scoreBoard['player']++;
                     $player->win($this->getAmount() * 2);
                     $this->setGameOver(true);
                     $this->setAmount(0);
                     break;
                 case 'Player Wins (Empty Deck)':
+                    $scoreBoard['player']++;
                     $player->win($this->getAmount() * 2);
                     $this->setRoundOver(true);
                     $this->setGameOver(true);
                     $this->setAmount(0);
                     break;
                 case 'Bank Wins (Empty Deck)':
-                    $player->win($this->getAmount());
-                    $this->setRoundOver(true);
-                    $this->setGameOver(true);
-                    $this->setAmount(0);
-                    break;
+                    // $bank->win($this->getAmount() * 2);
+                    // $this->setRoundOver(true);
+                    // $this->setGameOver(true);
+                    // $this->setAmount(0);
+                    // break;
                 case 'Bank Wins (Tie) (Empty Deck)':
+                    $scoreBoard['bank']++;
                     $bank->win($this->getAmount() * 2);
                     $this->setRoundOver(true);
                     $this->setGameOver(true);
@@ -232,7 +236,7 @@ class Game
                 case 'Bank Wins':
                     // bank win
                     $bank->win($this->getAmount() * 2);
-                    $scoreBoard = $this->getScoreBoard();
+                    // $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['bank']++;
                     $this->setAmount(0);
                     break;
@@ -240,7 +244,7 @@ class Game
                 case 'Player Wins':
                     // player win
                     $player->win($this->getAmount() * 2);
-                    $scoreBoard = $this->getScoreBoard();
+                    // $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['player']++;
                     $this->setAmount(0);
                     break;
@@ -248,6 +252,8 @@ class Game
                     return null;
                 
             }
+            $this->setScoreBoard($scoreBoard);
+
             return $endMessage;
         }
         return null;
