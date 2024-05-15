@@ -134,21 +134,32 @@ class Game
         return $this->scoreBoard;
     }
 
-    public function placeBet(int $amount): void
+    public function placeBet(int $amount): ?array
     {
         $player = $this->getPlayers()['player'];
         $bank = $this->getPlayers()['bank'];
 
+        if ($amount > $player->getMoney() || $amount > $bank->getMoney()) {
+            return ['type' => 'warning', 'message' => 'Täckning saknas för insatsen - välj ett mindre belopp!'];
+        }
+
         if ($player->bet($amount) && $bank->bet($amount)) {
             $this->setAmount($amount);
             $this->setBetPlaced(true);
+            return null;
         } else {
-            if ($this->isBetPlaced()) {
-                $player->setMoney($player->getMoney() + $amount);
-                $bank->setMoney($bank->getMoney() + $amount);
-                $this->setBetPlaced(false);
-            }
+            return null;
         }
+        // if ($player->bet($amount) && $bank->bet($amount)) {
+        //     $this->setAmount($amount);
+        //     $this->setBetPlaced(true);
+        // } else {
+        //     if ($this->isBetPlaced()) {
+        //         $player->setMoney($player->getMoney() + $amount);
+        //         $bank->setMoney($bank->getMoney() + $amount);
+        //         $this->setBetPlaced(false);
+        //     }
+        // }
     }
 
     public function playerTurn(): ?array
@@ -406,6 +417,10 @@ class Game
     {
         $playerScore = $this->calculatePoints($player);
         $bankScore = $this->calculatePoints($bank);
+
+        if ($playerScore > 21 && ($playerMoney === 0)) {
+            return 'Player Bankrupt';
+        }
 
         if ($playerScore > 21) {
             return 'Player Bust';
