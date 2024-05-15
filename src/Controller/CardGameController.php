@@ -65,10 +65,20 @@ class CardGameController extends AbstractController
 
             $amount = $request->request->getInt('amount');
 
-            $game->placeBet($amount);
-            $session->set("game", $game);
+            $flashData = $game->placeBet($amount);
 
-            return $this->redirectToRoute('game_play');
+            if ($flashData !== null) {
+                $this->addFlash($flashData['type'], $flashData['message']);
+                return $this->redirectToRoute('game_play');
+            } else {
+                $session->set("game", $game);
+                return $this->redirectToRoute('game_play');
+            }
+
+            // $game->placeBet($amount);
+            // $session->set("game", $game);
+
+            // return $this->redirectToRoute('game_play');
         }
 
     #[Route("/game/play", name: "game_play", methods: ['GET'])]
