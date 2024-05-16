@@ -4,7 +4,6 @@ namespace App\Game;
 
 use App\Card\DeckOfCards;
 
-
 class Game
 {
     protected DeckOfCards $deck;
@@ -20,8 +19,7 @@ class Game
         DeckOfCards $deck,
         Player $player,
         Player $bank
-    )
-    {
+    ) {
         $this->deck = $deck;
         $this->player = $player;
         $this->bank = $bank;
@@ -147,9 +145,9 @@ class Game
             $this->setAmount($amount);
             $this->setBetPlaced(true);
             return null;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public function playerTurn(): ?array
@@ -220,11 +218,6 @@ class Game
                     $this->setAmount(0);
                     break;
                 case 'Bank Wins (Empty Deck)':
-                    // $bank->win($this->getAmount() * 2);
-                    // $this->setRoundOver(true);
-                    // $this->setGameOver(true);
-                    // $this->setAmount(0);
-                    // break;
                 case 'Bank Wins (Tie) (Empty Deck)':
                     $scoreBoard['bank']++;
                     $bank->win($this->getAmount() * 2);
@@ -234,23 +227,19 @@ class Game
                     break;
                 case 'Bank Wins (Tie)':
                 case 'Bank Wins':
-                    // bank win
                     $bank->win($this->getAmount() * 2);
-                    // $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['bank']++;
                     $this->setAmount(0);
                     break;
                 case 'Bank Bust':
                 case 'Player Wins':
-                    // player win
                     $player->win($this->getAmount() * 2);
-                    // $scoreBoard = $this->getScoreBoard();
                     $scoreBoard['player']++;
                     $this->setAmount(0);
                     break;
                 default:
                     return null;
-                
+
             }
             $this->setScoreBoard($scoreBoard);
 
@@ -289,11 +278,11 @@ class Game
      * Calculate the total points in a hand.
      * Aces are worth 1 or 14 points depending on which brings the
      * total to <=21. Jacks are worth 11 points, Queens are worth
-     * 12 points, Kings are worth 13 points. The point value of 
+     * 12 points, Kings are worth 13 points. The point value of
      * remaining cards correlate to their respective numeric value.
-     * 
+     *
      * @param Player $player The player for whom to calculate hand points.
-     * 
+     *
      * @return int
      */
     public function calculatePoints(Player $player): int
@@ -312,22 +301,44 @@ class Game
             $value = $card->getValue();
             if ($value === 'Ace') {
                 $aceCount++;
-            } else {
-                if (isset($cardValues[$value])) {
-                    $total += $cardValues[$value];
-                } else {
-                    $total += (int)$value;
-                }
+                continue;
             }
+
+            if (isset($cardValues[$value])) {
+                $total += $cardValues[$value];
+                continue;
+            }
+            $total += (int)$value;
+
         }
 
         for ($i = 0; $i < $aceCount; $i++) {
             if ($total + 14 > 21) {
-                $total += 1;
-            } else {
-                $total += 14;
+                return $total + 1;
             }
+            $total += 14;
         }
+
+        // foreach ($cards as $card) {
+        //     $value = $card->getValue();
+        //     if ($value === 'Ace') {
+        //         $aceCount++;
+        //     } else {
+        //         if (isset($cardValues[$value])) {
+        //             $total += $cardValues[$value];
+        //         } else {
+        //             $total += (int)$value;
+        //         }
+        //     }
+        // }
+
+        // for ($i = 0; $i < $aceCount; $i++) {
+        //     if ($total + 14 > 21) {
+        //         $total += 1;
+        //     } else {
+        //         $total += 14;
+        //     }
+        // }
 
         return $total;
     }
@@ -354,9 +365,9 @@ class Game
                 return 'Player Wins (Empty Deck)';
             } elseif ($bankScore <= 21 && ($playerScore > 21 || $bankScore > $playerScore)) {
                 return 'Bank Wins (Empty Deck)';
-            } else {
-                return 'Bank Wins (Tie) (Empty Deck)';
             }
+
+            return 'Bank Wins (Tie) (Empty Deck)';
         }
 
         if ($this->isRoundOver()) {

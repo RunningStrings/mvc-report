@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Game\Game;
+use App\Game\GameFactory;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +14,12 @@ use Symfony\Component\Yaml\Yaml;
 
 class CardGameController extends AbstractController
 {
+    private $gameFactory;
     private Yaml $yamlParser;
 
-    public function __construct(Yaml $yamlParser)
+    public function __construct(GameFactory $gameFactory, Yaml $yamlParser)
     {
+        $this->gameFactory = $gameFactory;
         $this->yamlParser = $yamlParser;
     }
 
@@ -47,11 +50,12 @@ class CardGameController extends AbstractController
     {
         $game = $session->get("game");
         if (!$game || !$game->getDeck() || count($game->getDeck()->getDeck()) === 0 || $game->isGameOver()) {
-            $game = Game::newGame();
+            $game = $this->gameFactory->createNewGame();
             $session->set("game", $game);
-        } else {
-            $game->resetGame();
+            return $this->redirectToRoute('game_play');
         }
+
+        $game->resetGame();
 
         return $this->redirectToRoute('game_play');
     }
@@ -60,26 +64,21 @@ class CardGameController extends AbstractController
     public function bet(
         Request $request,
         SessionInterface $session
-        ): Response {
-            $game = $session->get("game");
+    ): Response {
+        $game = $session->get("game");
 
-            $amount = $request->request->getInt('amount');
+        $amount = $request->request->getInt('amount');
 
-            $flashData = $game->placeBet($amount);
+        $flashData = $game->placeBet($amount);
 
-            if ($flashData !== null) {
-                $this->addFlash($flashData['type'], $flashData['message']);
-                return $this->redirectToRoute('game_play');
-            } else {
-                $session->set("game", $game);
-                return $this->redirectToRoute('game_play');
-            }
-
-            // $game->placeBet($amount);
-            // $session->set("game", $game);
-
-            // return $this->redirectToRoute('game_play');
+        if ($flashData !== null) {
+            $this->addFlash($flashData['type'], $flashData['message']);
+            return $this->redirectToRoute('game_play');
         }
+
+        $session->set("game", $game);
+        return $this->redirectToRoute('game_play');
+    }
 
     #[Route("/game/play", name: "game_play", methods: ['GET'])]
     public function play(SessionInterface $session): Response
@@ -106,7 +105,8 @@ class CardGameController extends AbstractController
     ): Response {
         $game = $session->get("game");
 
-        if ($flashData = $game->playerTurn()) {
+        $flashData = $game->playerTurn();
+        if ($flashData) {
             $this->addFlash($flashData['type'], $flashData['message']);
         }
 
@@ -121,7 +121,8 @@ class CardGameController extends AbstractController
     ): Response {
         $game = $session->get("game");
 
-        if ($flashData = $game->bankTurn()) {
+        $flashData = $game->bankTurn();
+        if ($flashData) {
             $this->addFlash($flashData['type'], $flashData['message']);
         }
 
