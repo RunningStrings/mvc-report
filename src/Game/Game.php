@@ -32,11 +32,6 @@ class Game
         $this->scoreBoard = ['player' => 0, 'bank' => 0];
     }
 
-    public function setGameStatus(GameStatus $gameStatus): void
-    {
-        $this->gameStatus = $gameStatus;
-    }
-
     public function resetGame(): void
     {
         $player = $this->getPlayers()['player'];
@@ -49,6 +44,11 @@ class Game
         $this->setRoundOver(false);
         $this->setBetPlaced(false);
         $this->setAmount(0);
+    }
+
+    public function setGameStatus(GameStatus $gameStatus): void
+    {
+        $this->gameStatus = $gameStatus;
     }
 
     public function getDeck(): DeckOfCards
@@ -269,5 +269,31 @@ class Game
         }
 
         return $total;
+    }
+
+    /**
+     * Converts the game state to an array.
+     *
+     * @return array{
+     *     player: array{name: string, hand: string[], score: int, money: int},
+     *     bank: array{name: string, hand: string[], score: int, money: int},
+     *     roundOver: bool,
+     *     gameOver: bool,
+     *     betPlaced: bool,
+     *     amount: int,
+     *     scoreBoard: array<int>
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'player' => $this->player->toArray(),
+            'bank' => $this->bank->toArray(),
+            'roundOver' => $this->roundOver,
+            'gameOver' => $this->gameOver,
+            'betPlaced' => $this->betPlaced,
+            'amount' => $this->amount,
+            'scoreBoard' => $this->scoreBoard
+        ];
     }
 }
