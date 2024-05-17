@@ -129,7 +129,7 @@ class Game
     /**
      * Sets the score board.
      *
-     * @param array{player: int, bank: int} $scoreBoard An associative array containing scores for player and bank.
+     * @param array<int> $scoreBoard An associative array containing scores for player and bank.
      * @return void
      */
     public function setScoreBoard(array $scoreBoard): void
