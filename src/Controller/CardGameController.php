@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class CardGameController extends AbstractController
 {
-    private $gameFactory;
+    private GameFactory $gameFactory;
     private Yaml $yamlParser;
 
     public function __construct(GameFactory $gameFactory, Yaml $yamlParser)
@@ -48,8 +48,9 @@ class CardGameController extends AbstractController
     #[Route("/game/init", name: "game_init")]
     public function init(SessionInterface $session): Response
     {
+        /** @var Game|null $game */
         $game = $session->get("game");
-        if (!$game || !$game->getDeck() || count($game->getDeck()->getDeck()) === 0 || $game->isGameOver()) {
+        if (!$game || count($game->getDeck()->getDeck()) === 0 || $game->isGameOver()) {
             $game = $this->gameFactory->createNewGame();
             $session->set("game", $game);
             return $this->redirectToRoute('game_play');
@@ -65,6 +66,7 @@ class CardGameController extends AbstractController
         Request $request,
         SessionInterface $session
     ): Response {
+        /** @var Game $game */
         $game = $session->get("game");
 
         $amount = $request->request->getInt('amount');
@@ -83,6 +85,7 @@ class CardGameController extends AbstractController
     #[Route("/game/play", name: "game_play", methods: ['GET'])]
     public function play(SessionInterface $session): Response
     {
+        /** @var Game $game */
         $game = $session->get('game');
 
         $players = $game->getPlayers();
@@ -103,6 +106,7 @@ class CardGameController extends AbstractController
     public function hit(
         SessionInterface $session
     ): Response {
+        /** @var Game $game */
         $game = $session->get("game");
 
         $flashData = $game->playerTurn();
@@ -119,6 +123,7 @@ class CardGameController extends AbstractController
     public function stand(
         SessionInterface $session
     ): Response {
+        /** @var Game $game */
         $game = $session->get("game");
 
         $flashData = $game->bankTurn();
