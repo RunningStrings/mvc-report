@@ -69,4 +69,24 @@ class Player
     {
         $this->money += $amount;
     }
+
+    /**
+     * Converts the player state to an array.
+     *
+     * @return array{
+     *      name: string,
+     *      hand: string[],
+     *      score: int,
+     *      money: int
+     * }
+     */
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'hand' => $this->hand->toHandArray(),
+            'score' => $this->score,
+            'money' => $this->money
+        ];
+    }
 }
