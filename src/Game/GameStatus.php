@@ -13,6 +13,18 @@ class GameStatus
         $this->game = $game;
     }
 
+    /**
+     * Handles the game status and updates the game state accordingly.
+     *
+     * @param Game $game            The game object.
+     * @param string $gameStatus    The current game status.
+     * @param Player $player        The player object.
+     * @param Player $bank          The bank object.
+     *
+     * @return array<string>|null   Returns an array containing game status
+     *                              information, or null if no specific
+     *                              action is needed.
+     */
     public function handleGameStatus(Game $game, string $gameStatus, Player $player, Player $bank): ?array
     {
         $endMessage = $this->getEndMessage($gameStatus);
@@ -82,7 +94,8 @@ class GameStatus
             ];
 
             if (array_key_exists($gameStatus, $handlers)) {
-                $handlers[$gameStatus](); // Call the corresponding handler function
+                // Call the corresponding handler function
+                $handlers[$gameStatus]();
             }
 
             $game->setScoreBoard($scoreBoard);
@@ -92,6 +105,15 @@ class GameStatus
         return null;
     }
 
+    /**
+     * Returns the end message based on the game status.
+     *
+     * @param string $gameStatus    The current game status.
+     * @return array<string, string>|null   Returns an associative array
+     *                                      containing the end message
+     *                                      and type, or null if the game
+     *                                      status is not recognized.
+     */
     public function getEndMessage(string $gameStatus): ?array
     {
         $messages = [
