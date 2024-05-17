@@ -2,14 +2,13 @@
 
 namespace App\Game;
 
-use App\Card\DeckOfCards;
 use App\Game\Game;
 
 class GameStatus
 {
     protected Game $game;
 
-    public function __construct($game)
+    public function __construct(Game $game)
     {
         $this->game = $game;
     }
@@ -19,7 +18,7 @@ class GameStatus
         $endMessage = $this->getEndMessage($gameStatus);
         if ($endMessage !== null) {
             $scoreBoard = $game->getScoreBoard();
-            
+
             $handlers = [
                 'Player Bust' => function () use (&$scoreBoard, $bank, $game) {
                     $scoreBoard['bank']++;
@@ -85,11 +84,11 @@ class GameStatus
             if (array_key_exists($gameStatus, $handlers)) {
                 $handlers[$gameStatus](); // Call the corresponding handler function
             }
-    
+
             $game->setScoreBoard($scoreBoard);
             return $endMessage;
         }
-        
+
         return null;
     }
 
@@ -156,7 +155,7 @@ class GameStatus
 
     public function determineEmptyDeckOutcome(int $playerScore, int $bankScore): string
     {
-        if ($playerScore <=21 && ($bankScore > 21 || $playerScore > $bankScore)) {
+        if ($playerScore <= 21 && ($bankScore > 21 || $playerScore > $bankScore)) {
             return 'Player Wins (Empty Deck)';
         } elseif ($bankScore <= 21 && ($playerScore > 21 || $bankScore > $playerScore)) {
             return 'Bank Wins (Empty Deck)';
