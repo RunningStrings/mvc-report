@@ -4,6 +4,7 @@ namespace App\Game;
 
 use App\Card\DeckOfCards;
 use App\Game\Game;
+use App\Game\GameStatus;
 use App\Game\Player;
 
 class GameFactory
@@ -16,6 +17,12 @@ class GameFactory
         $player = new Player('Spelare', $deck);
         $bank = new Player('Bank', $deck);
 
-        return new Game($deck, $player, $bank);
+        $game = new Game($deck, $player, $bank);
+
+        $gameStatus = new GameStatus($game);
+
+        $game->setGameStatus($gameStatus);
+
+        return $game;
     }
 }
