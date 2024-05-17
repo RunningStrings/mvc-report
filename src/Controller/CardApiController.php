@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Card\CardHand;
 use App\Card\DeckOfCards;
+use App\Game\Game;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -232,6 +233,26 @@ class CardApiController extends AbstractController
         ];
 
         $response = new JsonResponse($data);
+        $response->setEncodingOptions(
+            $response->getEncodingOptions() | JSON_PRETTY_PRINT
+        );
+
+        return $response;
+    }
+
+    #[Route(
+        "/api/game",
+        name: "api_game",
+        methods: ['GET'],
+        options: ['description' => 'Visar den aktuella ställningen i kortspelet 21.']
+    )]
+    public function jsonGame(
+        SessionInterface $session
+    ): Response {
+        /** @var Game $game */
+        $game = $session->get('game');
+
+        $response = new JsonResponse($game->toArray());
         $response->setEncodingOptions(
             $response->getEncodingOptions() | JSON_PRETTY_PRINT
         );
