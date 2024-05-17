@@ -9,6 +9,7 @@ class Game
     protected DeckOfCards $deck;
     protected Player $player;
     protected Player $bank;
+    protected GameStatus $gameStatus;
     protected bool $roundOver;
     protected bool $gameOver;
     protected bool $betPlaced;
@@ -30,16 +31,21 @@ class Game
         $this->scoreBoard = ['player' => 0, 'bank' => 0];
     }
 
-    public static function newGame(): Game
+    public function setGameStatus(GameStatus $gameStatus): void
     {
-        $deck = new DeckOfCards();
-        $deck->shuffleDeck();
-
-        $player = new Player('Spelare', $deck);
-        $bank = new Player('Bank', $deck);
-
-        return new Game($deck, $player, $bank);
+        $this->gameStatus = $gameStatus;
     }
+
+    // public static function newGame(): Game
+    // {
+    //     $deck = new DeckOfCards();
+    //     $deck->shuffleDeck();
+
+    //     $player = new Player('Spelare', $deck);
+    //     $bank = new Player('Bank', $deck);
+
+    //     return new Game($deck, $player, $bank);
+    // }
 
     public function resetGame(): void
     {
@@ -162,9 +168,9 @@ class Game
         $score = $this->calculatePoints($player);
         $player->setScore($score);
 
-        $gameStatus = $this->gameStatus($player, $bank, $player->getMoney(), $bank->getMoney());
+        $gameStatus = $this->gameStatus->getGameStatus($this, $player, $bank, $player->getMoney(), $bank->getMoney());
 
-        return $this->handleGameStatus($gameStatus, $player, $bank);
+        return $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
     }
 
     public function bankTurn(): ?array
@@ -181,98 +187,107 @@ class Game
 
         $this->setRoundOver(true);
 
-        $gameStatus = $this->gameStatus($player, $bank, $player->getMoney(), $bank->getMoney());
+        $gameStatus = $this->gameStatus->getGameStatus($this, $player, $bank, $player->getMoney(), $bank->getMoney());
 
-        return $this->handleGameStatus($gameStatus, $player, $bank);
+        return $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
     }
 
-    private function handleGameStatus(string $gameStatus, Player $player, Player $bank): ?array
-    {
-        $endMessage = $this->getEndMessage($gameStatus);
-        if ($endMessage !== null) {
-            $scoreBoard = $this->getScoreBoard();
-            switch ($gameStatus) {
-                case 'Player Bust':
-                    $scoreBoard['bank']++;
-                    $bank->win($this->getAmount() * 2);
-                    $this->setRoundOver(true);
-                    $this->setAmount(0);
-                    break;
-                case 'Player Bankrupt':
-                    $scoreBoard['bank']++;
-                    $bank->win($this->getAmount() * 2);
-                    $this->setGameOver(true);
-                    $this->setAmount(0);
-                    break;
-                case 'Bank Bankrupt':
-                    $scoreBoard['player']++;
-                    $player->win($this->getAmount() * 2);
-                    $this->setGameOver(true);
-                    $this->setAmount(0);
-                    break;
-                case 'Player Wins (Empty Deck)':
-                    $scoreBoard['player']++;
-                    $player->win($this->getAmount() * 2);
-                    $this->setRoundOver(true);
-                    $this->setGameOver(true);
-                    $this->setAmount(0);
-                    break;
-                case 'Bank Wins (Empty Deck)':
-                case 'Bank Wins (Tie) (Empty Deck)':
-                    $scoreBoard['bank']++;
-                    $bank->win($this->getAmount() * 2);
-                    $this->setRoundOver(true);
-                    $this->setGameOver(true);
-                    $this->setAmount(0);
-                    break;
-                case 'Bank Wins (Tie)':
-                case 'Bank Wins':
-                    $bank->win($this->getAmount() * 2);
-                    $scoreBoard['bank']++;
-                    $this->setAmount(0);
-                    break;
-                case 'Bank Bust':
-                case 'Player Wins':
-                    $player->win($this->getAmount() * 2);
-                    $scoreBoard['player']++;
-                    $this->setAmount(0);
-                    break;
-                default:
-                    return null;
+    // private function handleGameStatus(string $gameStatus, Player $player, Player $bank): ?array
+    // {
+    //     $endMessage = $this->getEndMessage($gameStatus);
+    //     if ($endMessage !== null) {
+    //         $scoreBoard = $this->getScoreBoard();
+            
+    //         $handlers = [
+    //             'Player Bust' => function () use (&$scoreBoard, $bank) {
+    //                 $scoreBoard['bank']++;
+    //                 $bank->win($this->getAmount() * 2);
+    //                 $this->setRoundOver(true);
+    //                 $this->setAmount(0);
+    //             },
+    //             'Player Bankrupt' => function () use (&$scoreBoard, $bank) {
+    //                 $scoreBoard['bank']++;
+    //                 $bank->win($this->getAmount() * 2);
+    //                 $this->setGameOver(true);
+    //                 $this->setAmount(0);
+    //             },
+    //             'Bank Bankrupt' => function () use (&$scoreBoard, $player) {
+    //                 $scoreBoard['player']++;
+    //                 $player->win($this->getAmount() * 2);
+    //                 $this->setGameOver(true);
+    //                 $this->setAmount(0);
+    //             },
+    //             'Player Wins (Empty Deck)' => function () use (&$scoreBoard, $player) {
+    //                 $scoreBoard['player']++;
+    //                 $player->win($this->getAmount() * 2);
+    //                 $this->setRoundOver(true);
+    //                 $this->setGameOver(true);
+    //                 $this->setAmount(0);
+    //             },
+    //             'Bank Wins (Empty Deck)' => function () use (&$scoreBoard, $bank) {
+    //                 $scoreBoard['bank']++;
+    //                 $bank->win($this->getAmount() * 2);
+    //                 $this->setRoundOver(true);
+    //                 $this->setGameOver(true);
+    //                 $this->setAmount(0);
+    //             },
+    //             'Bank Wins (Tie) (Empty Deck)' => function () use (&$scoreBoard, $bank) {
+    //                 $scoreBoard['bank']++;
+    //                 $bank->win($this->getAmount() * 2);
+    //                 $this->setRoundOver(true);
+    //                 $this->setGameOver(true);
+    //                 $this->setAmount(0);
+    //             },
+    //             'Bank Wins (Tie)' => function () use (&$scoreBoard, $bank) {
+    //                 $bank->win($this->getAmount() * 2);
+    //                 $scoreBoard['bank']++;
+    //                 $this->setAmount(0);
+    //             },
+    //             'Bank Wins' => function () use (&$scoreBoard, $bank) {
+    //                 $bank->win($this->getAmount() * 2);
+    //                 $scoreBoard['bank']++;
+    //                 $this->setAmount(0);
+    //             },
+    //             'Bank Bust' => function () use (&$scoreBoard, $player) {
+    //                 $player->win($this->getAmount() * 2);
+    //                 $scoreBoard['player']++;
+    //                 $this->setAmount(0);
+    //             },
+    //             'Player Wins' => function () use (&$scoreBoard, $player) {
+    //                 $player->win($this->getAmount() * 2);
+    //                 $scoreBoard['player']++;
+    //                 $this->setAmount(0);
+    //             },
+    //         ];
 
-            }
-            $this->setScoreBoard($scoreBoard);
+    //         if (array_key_exists($gameStatus, $handlers)) {
+    //             $handlers[$gameStatus](); // Call the corresponding handler function
+    //         }
+    
+    //         $this->setScoreBoard($scoreBoard);
+    //         return $endMessage;
+    //     }
+        
+    //     return null;
+    // }
 
-            return $endMessage;
-        }
-        return null;
-    }
+    // private function getEndMessage(string $gameStatus): ?array
+    // {
+    //     $messages = [
+    //         'Player Bust' => ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'],
+    //         'Bank Wins' => ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'],
+    //         'Bank Wins (Tie)' => ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'],
+    //         'Player Bankrupt' => ['message' => 'Dina pengar är slut - du förlorade spelet!', 'type' => 'lose'],
+    //         'Bank Bankrupt' => ['message' => 'Banken är tömd - du vann spelet!', 'type' => 'win'],
+    //         'Player Wins (Empty Deck)' => ['message' => 'Kortleken är slut - du vann spelet!', 'type' => 'win'],
+    //         'Bank Wins (Empty Deck)' => ['message' => 'Kortleken är slut - du förlorade spelet!', 'type' => 'lose'],
+    //         'Bank Wins (Tie) (Empty Deck)' => ['message' => 'Kortleken är slut - tie - du förlorade spelet!', 'type' => 'lose'],
+    //         'Bank Bust' => ['message' => 'Du vann spelomgången!', 'type' => 'win'],
+    //         'Player Wins' => ['message' => 'Du vann spelomgången!', 'type' => 'win'],
+    //     ];
 
-    private function getEndMessage(string $gameStatus): ?array
-    {
-        switch ($gameStatus) {
-            case 'Player Bust':
-                return ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'];
-            case 'Player Bankrupt':
-                return ['message' => 'Dina pengar är slut - du förlorade spelet!', 'type' => 'lose'];
-            case 'Bank Bankrupt':
-                return ['message' => 'Banken är tömd - du vann spelet!', 'type' => 'win'];
-            case 'Player Wins (Empty Deck)':
-                return ['message' => 'Kortleken är slut - du vann spelet!', 'type' => 'win'];
-            case 'Bank Wins (Empty Deck)':
-                return ['message' => 'Kortleken är slut - du förlorade spelet!', 'type' => 'lose'];
-            case 'Bank Wins (Tie) (Empty Deck)':
-                return ['message' => 'Kortleken är slut - tie - du förlorade spelet!', 'type' => 'lose'];
-            case 'Bank Wins (Tie)':
-            case 'Bank Wins':
-                return ['message' => 'Du förlorade spelomgången!', 'type' => 'lose'];
-            case 'Bank Bust':
-            case 'Player Wins':
-                return ['message' => 'Du vann spelomgången!', 'type' => 'win'];
-            default:
-                return null;
-        }
-    }
+    //     return $messages[$gameStatus] ?? null;
+    // }
 
     /**
      * Calculate the total points in a hand.
@@ -319,69 +334,75 @@ class Game
             $total += 14;
         }
 
-        // foreach ($cards as $card) {
-        //     $value = $card->getValue();
-        //     if ($value === 'Ace') {
-        //         $aceCount++;
-        //     } else {
-        //         if (isset($cardValues[$value])) {
-        //             $total += $cardValues[$value];
-        //         } else {
-        //             $total += (int)$value;
-        //         }
-        //     }
-        // }
-
-        // for ($i = 0; $i < $aceCount; $i++) {
-        //     if ($total + 14 > 21) {
-        //         $total += 1;
-        //     } else {
-        //         $total += 14;
-        //     }
-        // }
-
         return $total;
     }
 
-    public function gameStatus(Player $player, Player $bank, int $playerMoney, int $bankMoney): string
-    {
-        $playerScore = $this->calculatePoints($player);
-        $bankScore = $this->calculatePoints($bank);
+//     public function gameStatus(Player $player, Player $bank, int $playerMoney, int $bankMoney): string
+//     {
+//         $playerScore = $this->calculatePoints($player);
+//         $bankScore = $this->calculatePoints($bank);
 
-        if ($playerScore > 21 && ($playerMoney === 0)) {
-            return 'Player Bankrupt';
-        }
+//         if ($this->isPlayerBustAndBankrupt($playerScore, $playerMoney)) {
+//             return 'Player Bankrupt';
+//         }
 
-        if ($playerScore > 21) {
-            return 'Player Bust';
-        }
+//         if ($this->isPlayerBust($playerScore)) {
+//             return 'Player Bust';
+//         }
 
-        if ($this->isRoundOver() && ($playerMoney === 0 || $bankMoney === 0)) {
-            return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
-        }
+//         if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
+//             return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
+//         }
 
-        if ($this->deck->isEmpty()) {
-            if ($playerScore <= 21 && ($bankScore > 21 || $playerScore > $bankScore)) {
-                return 'Player Wins (Empty Deck)';
-            } elseif ($bankScore <= 21 && ($playerScore > 21 || $bankScore > $playerScore)) {
-                return 'Bank Wins (Empty Deck)';
-            }
+//         if ($this->deck->isEmpty()) {
+//             return $this->determineEmptyDeckOutcome($playerScore, $bankScore);
+//         }
 
-            return 'Bank Wins (Tie) (Empty Deck)';
-        }
+//         if ($this->isRoundOver()) {
+//             return $this->determineRoundOverOutcome($playerScore, $bankScore);
+//         }
 
-        if ($this->isRoundOver()) {
-            if ($bankScore === $playerScore) {
-                return 'Bank Wins (Tie)';
-            } elseif ($bankScore > $playerScore && $bankScore <= 21) {
-                return 'Bank Wins';
-            } elseif ($bankScore > 21) {
-                return 'Bank Bust';
-            } elseif ($playerScore > $bankScore && $playerScore <= 21) {
-                return 'Player Wins';
-            }
-        }
+//         return 'Game On';
+//     }
 
-        return 'Game On';
-    }
+//     private function isPlayerBustAndBankrupt(int $playerScore, int $playerMoney): bool
+//     {
+//         return $playerScore > 21 && ($playerMoney === 0);
+//     }
+
+//     private function isPlayerBust(int $playerScore): bool
+//     {
+//         return $playerScore > 21;
+//     }
+
+//     private function isAnyBankrupt(int $playerMoney, int $bankMoney): bool
+//     {
+//         return $this->isRoundOver() && ($playerMoney === 0 || $bankMoney === 0);
+//     }
+
+//     private function determineEmptyDeckOutcome(int $playerScore, int $bankScore): string
+//     {
+//         if ($playerScore <=21 && ($bankScore > 21 || $playerScore > $bankScore)) {
+//             return 'Player Wins (Empty Deck)';
+//         } elseif ($bankScore <= 21 && ($playerScore > 21 || $bankScore > $playerScore)) {
+//             return 'Bank Wins (Empty Deck)';
+//         }
+
+//         return 'Bank Wins (Tie) (Empty Deck)';
+//     }
+
+//     private function determineRoundOverOutcome(int $playerScore, int $bankScore): string
+//     {
+//         if ($bankScore === $playerScore) {
+//             return 'Bank Wins (Tie)';
+//         } elseif ($bankScore > $playerScore && $bankScore <= 21) {
+//             return 'Bank Wins';
+//         } elseif ($bankScore > 21) {
+//             return 'Bank Bust';
+//         } elseif ($playerScore > $bankScore && $playerScore <= 21) {
+//             return 'Player Wins';
+//         }
+
+//         return 'Game On';
+//     }
 }
