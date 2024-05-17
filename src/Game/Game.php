@@ -14,9 +14,7 @@ class Game
     protected bool $gameOver;
     protected bool $betPlaced;
     protected int $amount;
-    /**
-     * @var int[]
-     */
+    /** @var int[] */
     protected array $scoreBoard;
 
     public function __construct(
@@ -68,6 +66,14 @@ class Game
         }
     }
 
+    /**
+     * Retrieves the players.
+     *
+     * @param string|null $playerType   The type of player ('player',
+     *                                  'bank'), or null to get both.
+     * @return array<string, Player>    Associative array containing
+     *                                  players, indexed by player type.
+     */
     public function getPlayers(?string $playerType = null): array
     {
         $players = [];
@@ -120,16 +126,35 @@ class Game
         return $this->amount;
     }
 
+    /**
+     * Sets the score board.
+     *
+     * @param array{player: int, bank: int} $scoreBoard An associative array containing scores for player and bank.
+     * @return void
+     */
     public function setScoreBoard(array $scoreBoard): void
     {
         $this->scoreBoard = $scoreBoard;
     }
 
+    /**
+     * Gets the score board.
+     *
+     * @return array<int> An associative array containing scores for player and bank.
+     */
     public function getScoreBoard(): array
     {
         return $this->scoreBoard;
     }
 
+    /**
+     * Places a bet.
+     *
+     * @param int $amount   The amount to bet.
+     * @return array<string>|null   An array with flash message data if the bet
+     *                      cannot be placed, or null if bet is
+     *                      successfully placed.
+     */
     public function placeBet(int $amount): ?array
     {
         $player = $this->getPlayers()['player'];
@@ -148,10 +173,17 @@ class Game
         return null;
     }
 
+    /**
+     * Executes the player's turn in the game.
+     *
+     * @return array<string>|null Returns an array containing game status information, or null if the round continues.
+     */
     public function playerTurn(): ?array
     {
-        if (!$this->deck->isEmpty()) {
-            $this->player->getHand()->addCard($this->deck->draw());
+        $drawnCard = $this->deck->draw();
+
+        if (!$this->deck->isEmpty() && $drawnCard !== null) {
+            $this->player->getHand()->addCard($drawnCard);
         }
 
         $player = $this->getPlayers()['player'];
@@ -165,10 +197,17 @@ class Game
         return $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
     }
 
+    /**
+     * Executes the bank's turn in the game.
+     *
+     * @return array<string> Returns an array containing game status information.
+     */
     public function bankTurn(): ?array
     {
-        while ($this->calculatePoints($this->bank) < 17 && !$this->deck->isEmpty()) {
-            $this->bank->getHand()->addCard($this->deck->draw());
+        $drawnCard = $this->deck->draw();
+
+        while ($this->calculatePoints($this->bank) < 17 && !$this->deck->isEmpty() && $drawnCard !== null) {
+            $this->bank->getHand()->addCard($drawnCard);
         }
 
         $player = $this->getPlayers()['player'];
