@@ -27,7 +27,7 @@ class CardGameController extends AbstractController
     public function game(): Response
     {
         $data = [
-            "title" => "The Game",
+            "title" => "Kortspel: 21",
             "metadata" => $this->loadMetaData()
         ];
 
@@ -93,7 +93,7 @@ class CardGameController extends AbstractController
 
         $data = [
             "game" => $game,
-            "title" => "Tjugoett",
+            "title" => "21",
             "players" => $players,
             "amount" => $amount,
             "metadata" => $this->loadMetaData()
