@@ -249,8 +249,12 @@ class CardApiController extends AbstractController
     public function jsonGame(
         SessionInterface $session
     ): Response {
-        /** @var Game $game */
+        /** @var Game|null $game */
         $game = $session->get('game');
+
+        if (!$game) {
+            return new JsonResponse('Inget Game objekt lagrat i sessionen.');
+        }
 
         $response = new JsonResponse($game->toArray());
         $response->setEncodingOptions(
