@@ -227,7 +227,7 @@ class Game
     /**
      * Calculate the total points in a hand.
      * Aces are worth 1 or 14 points depending on which brings the
-     * total to <=21. Jacks are worth 11 points, Queens are worth
+     * total to <= 21. Jacks are worth 11 points, Queens are worth
      * 12 points, Kings are worth 13 points. The point value of
      * remaining cards correlate to their respective numeric value.
      *
