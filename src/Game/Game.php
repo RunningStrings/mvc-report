@@ -204,10 +204,11 @@ class Game
      */
     public function bankTurn(): ?array
     {
-        $drawnCard = $this->deck->draw();
-
-        while ($this->calculatePoints($this->bank) < 17 && !$this->deck->isEmpty() && $drawnCard !== null) {
-            $this->bank->getHand()->addCard($drawnCard);
+        while ($this->calculatePoints($this->bank) < 17 && !$this->deck->isEmpty()) {
+            $drawnCard = $this->deck->draw();
+            if ($drawnCard !== null) {
+                $this->bank->getHand()->addCard($drawnCard);
+            }
         }
 
         $player = $this->getPlayers()['player'];
