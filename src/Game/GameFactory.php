@@ -9,7 +9,7 @@ use App\Game\Player;
 
 class GameFactory
 {
-    public static function createNewGame(): Game
+    public function createNewGame(): Game
     {
         $deck = new DeckOfCards();
         $deck->shuffleDeck();
