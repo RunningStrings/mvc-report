@@ -108,7 +108,7 @@ class GameStatus
     /**
      * Returns the end message based on the game status.
      *
-     * @param string $gameStatus    The current game status.
+     * @param string $gameStatus            The current game status.
      * @return array<string, string>|null   Returns an associative array
      *                                      containing the end message
      *                                      and type, or null if the game
