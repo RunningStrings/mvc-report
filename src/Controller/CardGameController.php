@@ -66,12 +66,16 @@ class CardGameController extends AbstractController
         Request $request,
         SessionInterface $session
     ): Response {
-        /** @var Game $game */
+        /** @var Game|null $game */
         $game = $session->get("game");
 
-        $amount = $request->request->getInt('amount');
+        if ($game === null) {
+            return $this->redirectToRoute('game');
+        }
 
-        $flashData = $game->placeBet($amount);
+        $betAmount = $request->request->getInt('betAmount');
+
+        $flashData = $game->placeBet($betAmount);
 
         if ($flashData !== null) {
             $this->addFlash($flashData['type'], $flashData['message']);
@@ -85,17 +89,21 @@ class CardGameController extends AbstractController
     #[Route("/game/play", name: "game_play", methods: ['GET'])]
     public function play(SessionInterface $session): Response
     {
-        /** @var Game $game */
+        /** @var Game|null $game */
         $game = $session->get('game');
 
+        if ($game === null) {
+            return $this->redirectToRoute('game');
+        }
+
         $players = $game->getPlayers();
-        $amount = $game->getAmount();
+        $betAmount = $game->getBetAmount();
 
         $data = [
             "game" => $game,
             "title" => "21",
             "players" => $players,
-            "amount" => $amount,
+            "betAmount" => $betAmount,
             "metadata" => $this->loadMetaData()
         ];
 
@@ -106,8 +114,12 @@ class CardGameController extends AbstractController
     public function hit(
         SessionInterface $session
     ): Response {
-        /** @var Game $game */
+        /** @var Game|null $game */
         $game = $session->get("game");
+
+        if ($game === null) {
+            return $this->redirectToRoute('game');
+        }
 
         $flashData = $game->playerTurn();
         if ($flashData) {
@@ -123,8 +135,12 @@ class CardGameController extends AbstractController
     public function stand(
         SessionInterface $session
     ): Response {
-        /** @var Game $game */
+        /** @var Game|null $game */
         $game = $session->get("game");
+
+        if ($game === null) {
+            return $this->redirectToRoute('game');
+        }
 
         $flashData = $game->bankTurn();
         if ($flashData) {

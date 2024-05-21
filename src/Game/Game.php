@@ -13,7 +13,7 @@ class Game
     protected bool $roundOver;
     protected bool $gameOver;
     protected bool $betPlaced;
-    protected int $amount;
+    protected int $betAmount;
     /** @var int[] */
     protected array $scoreBoard;
 
@@ -28,7 +28,7 @@ class Game
         $this->roundOver = false;
         $this->gameOver = false;
         $this->betPlaced = false;
-        $this->amount = 0;
+        $this->betAmount = 0;
         $this->scoreBoard = ['player' => 0, 'bank' => 0];
     }
 
@@ -43,7 +43,7 @@ class Game
         $bank->setScore(0);
         $this->setRoundOver(false);
         $this->setBetPlaced(false);
-        $this->setAmount(0);
+        $this->setBetAmount(0);
     }
 
     public function setGameStatus(GameStatus $gameStatus): void
@@ -116,14 +116,14 @@ class Game
         return $this->betPlaced;
     }
 
-    public function setAmount(int $amount): void
+    public function setBetAmount(int $betAmount): void
     {
-        $this->amount = $amount;
+        $this->betAmount = $betAmount;
     }
 
-    public function getAmount(): int
+    public function getBetAmount(): int
     {
-        return $this->amount;
+        return $this->betAmount;
     }
 
     /**
@@ -150,22 +150,22 @@ class Game
     /**
      * Places a bet.
      *
-     * @param int $amount   The amount to bet.
+     * @param int $betAmount   The amount to bet.
      * @return array<string>|null   An array with flash message data if the bet
      *                      cannot be placed, or null if bet is
      *                      successfully placed.
      */
-    public function placeBet(int $amount): ?array
+    public function placeBet(int $betAmount): ?array
     {
         $player = $this->getPlayers()['player'];
         $bank = $this->getPlayers()['bank'];
 
-        if ($amount > $player->getMoney() || $amount > $bank->getMoney()) {
+        if ($betAmount > $player->getMoney() || $betAmount > $bank->getMoney()) {
             return ['type' => 'warning', 'message' => 'Täckning saknas för insatsen - välj ett mindre belopp!'];
         }
 
-        if ($player->bet($amount) && $bank->bet($amount)) {
-            $this->setAmount($amount);
+        if ($player->bet($betAmount) && $bank->bet($betAmount)) {
+            $this->setBetAmount($betAmount);
             $this->setBetPlaced(true);
             return null;
         }
@@ -281,7 +281,7 @@ class Game
      *     roundOver: bool,
      *     gameOver: bool,
      *     betPlaced: bool,
-     *     amount: int,
+     *     betAmount: int,
      *     scoreBoard: array<int>
      * }
      */
@@ -293,7 +293,7 @@ class Game
             'roundOver' => $this->roundOver,
             'gameOver' => $this->gameOver,
             'betPlaced' => $this->betPlaced,
-            'amount' => $this->amount,
+            'betAmount' => $this->betAmount,
             'scoreBoard' => $this->scoreBoard
         ];
     }

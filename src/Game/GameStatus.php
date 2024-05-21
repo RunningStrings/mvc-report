@@ -34,62 +34,62 @@ class GameStatus
             $handlers = [
                 'Player Bust' => function () use (&$scoreBoard, $bank, $game) {
                     $scoreBoard['bank']++;
-                    $bank->win($game->getAmount() * 2);
+                    $bank->win($game->getBetAmount() * 2);
                     $game->setRoundOver(true);
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Player Bankrupt' => function () use (&$scoreBoard, $bank, $game) {
                     $scoreBoard['bank']++;
-                    $bank->win($game->getAmount() * 2);
+                    $bank->win($game->getBetAmount() * 2);
                     $game->setGameOver(true);
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Bank Bankrupt' => function () use (&$scoreBoard, $player, $game) {
                     $scoreBoard['player']++;
-                    $player->win($game->getAmount() * 2);
+                    $player->win($game->getBetAmount() * 2);
                     $game->setGameOver(true);
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Player Wins (Empty Deck)' => function () use (&$scoreBoard, $player, $game) {
                     $scoreBoard['player']++;
-                    $player->win($game->getAmount() * 2);
+                    $player->win($game->getBetAmount() * 2);
                     $game->setRoundOver(true);
                     $game->setGameOver(true);
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Bank Wins (Empty Deck)' => function () use (&$scoreBoard, $bank, $game) {
                     $scoreBoard['bank']++;
-                    $bank->win($game->getAmount() * 2);
+                    $bank->win($game->getBetAmount() * 2);
                     $game->setRoundOver(true);
                     $game->setGameOver(true);
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Bank Wins (Tie) (Empty Deck)' => function () use (&$scoreBoard, $bank, $game) {
                     $scoreBoard['bank']++;
-                    $bank->win($game->getAmount() * 2);
+                    $bank->win($game->getBetAmount() * 2);
                     $game->setRoundOver(true);
                     $game->setGameOver(true);
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Bank Wins (Tie)' => function () use (&$scoreBoard, $bank, $game) {
-                    $bank->win($game->getAmount() * 2);
+                    $bank->win($game->getBetAmount() * 2);
                     $scoreBoard['bank']++;
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Bank Wins' => function () use (&$scoreBoard, $bank, $game) {
-                    $bank->win($game->getAmount() * 2);
+                    $bank->win($game->getBetAmount() * 2);
                     $scoreBoard['bank']++;
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Bank Bust' => function () use (&$scoreBoard, $player, $game) {
-                    $player->win($game->getAmount() * 2);
+                    $player->win($game->getBetAmount() * 2);
                     $scoreBoard['player']++;
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
                 'Player Wins' => function () use (&$scoreBoard, $player, $game) {
-                    $player->win($game->getAmount() * 2);
+                    $player->win($game->getBetAmount() * 2);
                     $scoreBoard['player']++;
-                    $game->setAmount(0);
+                    $game->setBetAmount(0);
                 },
             ];
 
