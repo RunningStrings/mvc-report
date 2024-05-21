@@ -55,19 +55,19 @@ class Player
         $this->money = $money;
     }
 
-    public function bet(int $amount): bool
+    public function bet(int $betAmount): bool
     {
-        if ($amount > $this->money) {
+        if ($betAmount > $this->money) {
             return false;
         }
 
-        $this->money -= $amount;
+        $this->money -= $betAmount;
         return true;
     }
 
-    public function win(int $amount): void
+    public function win(int $betAmount): void
     {
-        $this->money += $amount;
+        $this->money += $betAmount;
     }
 
     /**
