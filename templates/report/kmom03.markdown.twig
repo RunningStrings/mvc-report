@@ -1,3 +1,69 @@
 <a id="kmom03"></a>Kmom03
 --------------------------
-Redovisningstext
+Att inleda det här "miniprojektet" med att rita upp flödesdiagram 
+och skriva pseudokod har varit en stor hjälp, dels avseende 
+flödet i spelet, dels avseende vilka klasser och metoder som skulle
+behövas. Slutprodukten ser lite annorlunda ut, med fler klasser och 
+ett lite annorlunda flöde i vissa steg, men det har känts givande 
+att ha gjort en skiss över en någorlunda rimlig väg mot målet.
+Även om jag kanske inte gick tillbaka och tittade på mitt diagram 
+och min pseudokod jättemycket, så har det varit en riktlinje att 
+förhålla sig till, och det var även ett bra sätt att strukturera
+tankarna innan jag började skriva koden.
+
+Överlag är jag nöjd med min implementation av uppgiften. Jag valde
+spelet 21, och hade till en början klasserna Game, Player, och 
+controllern CardGameController (med alldeles för mycket kod).
+Efter hand flyttades en väldig massa kod från controllern till 
+klasserna, möjligheten att satsa pengar lades till, och efter 
+påtryckning från PHPMD på grund av static access skapade jag klassen 
+GameFactory, för att separera skapandet av ett nytt Game objekt med 
+innehåll från övrig kod. Detta gör att controllern anropar klasserna 
+GameFactory (för att skapa ett nytt Game objekt) och Game (för att 
+hantera spelets gång).
+
+Klassen Game blev först ganska stor och spretig, och PHPMD hade 
+vissa åsikter kring hög komplexitet, så de metoder som hanterar 
+ställningen i spelet flyttades till klassen GameStatus, och ett 
+par switch-case konstruktioner gjordes om till associativa arrayer.
+
+Vissa delar krävde mer arbete än andra: Beräkningen av värdet på 
+ess genomgick ett antal versioner, och det tog även en del tid att 
+få till det så att flaggor och korthänder återställs som de ska, 
+oavsett om en spelrunda tar slut medan spelaren drar kort eller 
+efter att banken dragit sina. Hanteringen av spelrundans respektive
+spelets slut och olika situationer som kan uppstå när både poäng, 
+pengar och kortlek spelar in har bjudit på många 
+överraskningar, men efter många turer *tror* jag att jag har 
+lyckats fånga de flesta situationer som jag kan komma på. Just nu,
+i alla fall.
+
+Eventuella förbättringar i min kod hade varit att bryta ut delar av 
+klassen Game i ytterligare klasser - den är, ärligt talat, fortfarande 
+väl innehållsrik. Till exempel borde betting-delen hanteras i en egen 
+klass, och även poängberäkningen. Men jag tycker ändå att jag fått 
+till något slags grundläggande separation med de klasser jag har, 
+så jag är ändå relativt nöjd.
+
+I spelet i stort hade väl den mest uppenbara förbättringen varit att 
+kunna lägga till fler spelare, och jag hade även tänkt försöka mig på 
+att implementera korträkning, men som det blev har jag stannat vid att 
+använda samma kortlek i runda efter runda (när korten - eller någons 
+pengar - är slut är spelet över), och där finns ju alltid en möjlighet 
+till traditionell korträkning för den hugade.
+
+Att koda i ramverk/Symfony känns fortsatt bra - det finns väldigt 
+mycket att lära, och detaljer som möjligheten att enkelt kunna 
+skicka in värden i vyer/templates är ju väldigt praktisk. På det 
+stora hela ger ramverk en tydlig struktur och förutsägbarhet som 
+dels är trevlig för ensamkodning, men det känns allt tydligare att 
+det framför allt bör vara en enorm tillgång i större sammanhang.
+
+Min TIL för kursmomentet är hur mycket man kan lära sig av linters, 
+och att det kan vara en både givande och frustrerande utmaning att 
+nå upp till deras krav. Även om så kallad "snygg kod" rimligtvis är 
+mycket mer än att ta sig förbi PHPStan och PHPMD så ger de en 
+(förutsatt att man använder dem på vägen) kontinuerlig fingervisning 
+om vad som kan göra kod mer underhållsvänlig och förutsägbar, och 
+tids nog bör det väl sitta i ryggmärgen att komma ihåg type hinting 
+och att undvika else-missbruk.
