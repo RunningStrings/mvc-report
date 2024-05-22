@@ -14,6 +14,56 @@ class GameStatus
     }
 
     /**
+     * Returns the current game status.
+     */
+    public function getGameStatus(Game $game, Player $player, Player $bank, int $playerMoney, int $bankMoney): string
+    {
+        $playerScore = $game->calculatePoints($player);
+        $bankScore = $game->calculatePoints($bank);
+
+        // Check if player is bust and bankrupt, if true end round
+        if ($this->isPlayerBustAndBankrupt($playerScore, $playerMoney)) {
+            $game->setRoundOver(true);
+            return 'Player Bankrupt';
+        }
+
+        if ($this->isPlayerBust($playerScore)) {
+            return 'Player Bust';
+        }
+
+        // Determine outcome of the round if round is over
+        if ($this->game->isRoundOver()) {
+            $roundOutcome = $this->determineRoundOverOutcome($playerScore, $bankScore);
+
+            // Handle the round outcome and update money and scoreboard
+            $this->handleGameStatus($game, $roundOutcome, $player, $bank);
+
+            // Check for empty deck after handling the round outcome
+            if ($this->game->getDeck()->isEmpty()) {
+                $emptyDeckOutcome = $this->determineEmptyDeckOutcome($playerScore, $bankScore);
+                $this->handleGameStatus($game, $emptyDeckOutcome, $player, $bank);
+
+                // After handling empty deck outcome, check for bankruptcy
+                if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
+                    return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
+                }
+
+                return $emptyDeckOutcome;
+            }
+
+            // After handling the round outcome, check for bankruptcy
+            if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
+                return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
+            }
+
+            // If neither is bankrupt, return the round outcome
+            return $roundOutcome;
+        }
+
+        return 'Game On';
+    }
+
+    /**
      * Handles the game status and updates the game state accordingly.
      *
      * @param Game $game            The game object.
@@ -132,68 +182,33 @@ class GameStatus
         return $messages[$gameStatus] ?? null;
     }
 
-    public function getGameStatus(Game $game, Player $player, Player $bank, int $playerMoney, int $bankMoney): string
-    {
-        $playerScore = $game->calculatePoints($player);
-        $bankScore = $game->calculatePoints($bank);
-
-        // Check if player is bust and bankrupt, if true end round
-        if ($this->isPlayerBustAndBankrupt($playerScore, $playerMoney)) {
-            $game->setRoundOver(true);
-            return 'Player Bankrupt';
-        }
-
-        if ($this->isPlayerBust($playerScore)) {
-            return 'Player Bust';
-        }
-
-        // Determine outcome of the round if round is over
-        if ($this->game->isRoundOver()) {
-            $roundOutcome = $this->determineRoundOverOutcome($playerScore, $bankScore);
-
-            // Handle the round outcome and update money and scoreboard
-            $this->handleGameStatus($game, $roundOutcome, $player, $bank);
-
-            // Check for empty deck after handling the round outcome
-            if ($this->game->getDeck()->isEmpty()) {
-                $emptyDeckOutcome = $this->determineEmptyDeckOutcome($playerScore, $bankScore);
-                $this->handleGameStatus($game, $emptyDeckOutcome, $player, $bank);
-
-                // After handling empty deck outcome, check for bankruptcy
-                if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
-                    return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
-                }
-
-                return $emptyDeckOutcome;
-            }
-
-            // After handling the round outcome, check for bankruptcy
-            if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
-                return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
-            }
-
-            // If neither is bankrupt, return the round outcome
-            return $roundOutcome;
-        }
-
-        return 'Game On';
-    }
-
+    /**
+     * Checks if the player is bust and bankrupt.
+     */
     public function isPlayerBustAndBankrupt(int $playerScore, int $playerMoney): bool
     {
         return $playerScore > 21 && ($playerMoney === 0);
     }
 
+    /**
+     * Checks if the player is bust.
+     */
     public function isPlayerBust(int $playerScore): bool
     {
         return $playerScore > 21;
     }
 
+    /**
+     * Checks if any player is bankrupt.
+     */
     public function isAnyBankrupt(int $playerMoney, int $bankMoney): bool
     {
         return $this->game->isRoundOver() && ($playerMoney === 0 || $bankMoney === 0);
     }
 
+    /**
+     * Determines the outcome when the deck is empty.
+     */
     public function determineEmptyDeckOutcome(int $playerScore, int $bankScore): string
     {
         if ($playerScore <= 21 && ($bankScore > 21 || $playerScore > $bankScore)) {
