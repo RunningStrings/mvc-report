@@ -194,7 +194,14 @@ class Game
 
         $gameStatus = $this->gameStatus->getGameStatus($this, $player, $bank, $player->getMoney(), $bank->getMoney());
 
-        return $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
+        $result = $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
+
+        if ($this->deck->isEmpty()) {
+            $gameStatus = $this->gameStatus->determineEmptyDeckOutcome($player->getScore(), $bank->getScore());
+            $result = $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
+        }
+
+        return $result;
     }
 
     /**
@@ -221,7 +228,14 @@ class Game
 
         $gameStatus = $this->gameStatus->getGameStatus($this, $player, $bank, $player->getMoney(), $bank->getMoney());
 
-        return $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
+        $result = $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
+
+        if ($this->deck->isEmpty()) {
+            $gameStatus = $this->gameStatus->determineEmptyDeckOutcome($player->getScore(), $bank->getScore());
+            $result = $this->gameStatus->handleGameStatus($this, $gameStatus, $player, $bank);
+        }
+
+        return $result;
     }
 
     /**
