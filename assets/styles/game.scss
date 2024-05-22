@@ -27,7 +27,7 @@ input {
     }
 }
 
-#amount {
+#bet-amount {
     background-color: $content-color;
     border: 1px solid $accent-color;
     border-radius: 5px;
@@ -37,7 +37,7 @@ input {
     width: 45%;
 }
 
-label[for="amount"] {
+label[for="betAmount"] {
     position: absolute;
     left: -9999px;
     visibility: hidden;
