@@ -21,7 +21,7 @@ class GameStatus
         $playerScore = $game->calculatePoints($player);
         $bankScore = $game->calculatePoints($bank);
 
-        // Check if player is bust and bankrupt, if true end round
+        // Check if player is bust and bankrupt, if true - end round
         if ($this->isPlayerBustAndBankrupt($playerScore, $playerMoney)) {
             $game->setRoundOver(true);
             return 'Player Bankrupt';
@@ -31,6 +31,21 @@ class GameStatus
             return 'Player Bust';
         }
 
+        // Check if the deck is empty
+        if ($this->game->getDeck()->isEmpty()) {
+            $emptyDeckOutcome = $this->determineEmptyDeckOutcome($playerScore, $bankScore);
+            $this->handleGameStatus($game, $emptyDeckOutcome, $player, $bank);
+
+            // After handling empty deck outcome, check for bankruptcy
+            $playerMoney = $player->getMoney();
+            $bankMoney = $bank->getMoney();
+            if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
+                return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
+            }
+
+            return $emptyDeckOutcome;
+        }
+
         // Determine outcome of the round if round is over
         if ($this->game->isRoundOver()) {
             $roundOutcome = $this->determineRoundOverOutcome($playerScore, $bankScore);
@@ -38,20 +53,9 @@ class GameStatus
             // Handle the round outcome and update money and scoreboard
             $this->handleGameStatus($game, $roundOutcome, $player, $bank);
 
-            // Check for empty deck after handling the round outcome
-            if ($this->game->getDeck()->isEmpty()) {
-                $emptyDeckOutcome = $this->determineEmptyDeckOutcome($playerScore, $bankScore);
-                $this->handleGameStatus($game, $emptyDeckOutcome, $player, $bank);
-
-                // After handling empty deck outcome, check for bankruptcy
-                if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
-                    return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
-                }
-
-                return $emptyDeckOutcome;
-            }
-
             // After handling the round outcome, check for bankruptcy
+            $playerMoney = $player->getMoney();
+            $bankMoney = $bank->getMoney();
             if ($this->isAnyBankrupt($playerMoney, $bankMoney)) {
                 return $playerMoney === 0 ? 'Player Bankrupt' : 'Bank Bankrupt';
             }
@@ -174,7 +178,7 @@ class GameStatus
             'Bank Bankrupt' => ['message' => 'Banken är tömd - du vann spelet!', 'type' => 'win'],
             'Player Wins (Empty Deck)' => ['message' => 'Kortleken är slut - du vann spelet!', 'type' => 'win'],
             'Bank Wins (Empty Deck)' => ['message' => 'Kortleken är slut - du förlorade spelet!', 'type' => 'lose'],
-            'Bank Wins (Tie) (Empty Deck)' => ['message' => 'Kortleken är slut - tie - du förlorade spelet!', 'type' => 'lose'],
+            'Bank Wins (Tie) (Empty Deck)' => ['message' => 'Kortleken är slut- du förlorade spelet!', 'type' => 'lose'],
             'Bank Bust' => ['message' => 'Du vann spelomgången!', 'type' => 'win'],
             'Player Wins' => ['message' => 'Du vann spelomgången!', 'type' => 'win'],
         ];
